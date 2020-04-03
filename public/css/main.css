@@ -1,0 +1,305 @@
+/*the container must be positioned relative:*/
+.mycustom-select {
+  position: relative;
+  font-family: Arial;
+  border-radius: 5px;
+}
+
+.mycustom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 17px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 5px;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  border-radius: 5px;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+/*******************************************************************************
+                Post Styles
+********************************************************************************/
+.postHeader {
+  display: inline-flex;
+  flex: wrap;
+  height: max-content;
+  margin-top: 20px;
+}
+
+.postAuthorPic {
+  border-style: groove;
+  width: 68px;
+  height: 68px;
+  cursor: pointer;
+}
+
+.postInfo {
+  display: block;
+  text-align: justify;
+  justify-content: auto;
+  padding: 0px 5px;
+}
+
+.postTime {
+  font-weight: 300;
+  color: black;
+  font-size: 12px;
+}
+
+.postTitle {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.replyUsername {
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.replyProfile {
+  text-align: center;
+  width: max-content;
+}
+
+.replyPic {
+  height: 132px;
+  width: 132px;
+  border-style: groove;
+  cursor: pointer;
+}
+
+.replyPic:hover, .postAuthorPic:hover {
+  -moz-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.postTime {
+  font-weight: 300;
+  color: black;
+  font-size: 12px;
+}
+
+.upvoteCount {
+  font-size: 15px;
+  text-align: center;
+  height: max-content;
+  width: 25px;
+  height: 27px;
+  border-radius: 3px;
+  padding-top: 2px;
+  margin-top: 1.5px;
+  background: -webkit-rgb(230, 230, 230);
+  background: -o-rgb(230, 230, 230);
+  background: -ms-rgb(230, 230, 230);
+  background: -moz-rgb(230, 230, 230);
+  background: rgb(230, 230, 230);
+}
+
+
+/*******************************************************************************
+                General
+********************************************************************************/
+.footer {
+  height: 130px; 
+  display: table-row;
+}
+
+.btn-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: #cccccc;
+  border-color: #cccccc;
+  color: black;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.scrollBtn {
+  position: fixed;
+  display: none;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+}
+
+
+/*******************************************************************************
+                TO CHANGE
+********************************************************************************/
+.navbar, .footer, .header {
+  background-color: #1a1a1a;
+}
+
+.navbarFeatures {
+  color: #d9d9d9;
+}
+
+.navbarFeatures:hover {
+  color: White;
+}
+
+#container {
+  background: -webkit-rgb(34, 46, 62);
+  background: -o-rgb(34, 46, 62);
+  background: -ms-rgb(34, 46, 62);
+  background: -moz-rgb(34, 46, 62);
+  background: rgb(34, 46, 62);
+}
+
+.contentContainer {
+  background: -webkit-rgb(226, 227, 231);
+  background: -o-rgb(226, 227, 231);
+  background: -ms-rgb(226, 227, 231);
+  background: -moz-rgb(226, 227, 231);
+  background: rgb(226, 227, 231);
+}
+
+.userReply {
+  background: -webkit-rgb(241, 241, 241);
+  background: -o-rgb(241, 241, 241);
+  background: -ms-rgb(241, 241, 241);
+  background: -moz-rgb(241, 241, 241);
+  background: rgb(241, 241, 241);
+}
+
+.repliesHeader {
+  background: -webkit-linear-gradient(bottom, rgb(43, 57, 76) 0%, rgb(66, 84, 108) 100%);
+  background: -o-linear-gradient(bottom, rgb(43, 57, 76) 0%, rgb(66, 84, 108) 100%);
+  background: -ms-linear-gradient(bottom, rgb(43, 57, 76) 0%, rgb(66, 84, 108) 100%);
+  background: -moz-linear-gradient(bottom, rgb(43, 57, 76) 0%, rgb(66, 84, 108) 100%);
+  background: linear-gradient(to top, rgb(43, 57, 76) 0%, rgb(66, 84, 108) 100%);
+  color: White;
+}
+
+.replyContent {
+  background: -webkit-rgb(255, 255, 255);
+  background: -o-rgb(255, 255, 255);
+  background: -ms-rgb(255, 255, 255);
+  background: -moz-rgb(255, 255, 255);
+  background: rgb(255, 255, 255);
+}
+
+.reportBtn, .quoteBtn, .upvoteBtn, .downvoteBtn {
+  font-size: 12px;
+  height: max-content;
+  width: max-content;
+  margin: 0px;
+  padding: 4px 5px;
+  background: -webkit-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(223, 223, 223) 86%);
+  background: -o-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(223, 223, 223) 86%);
+  background: -ms-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(223, 223, 223) 86%);
+  background: -moz-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(223, 223, 223) 86%);
+  background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgb(223, 223, 223) 86%);
+  background-color: #cccccc;
+  border-color: #cccccc;
+  color: #2b394c;
+}
+
+.upvoteBtn {
+  background: -webkit-rgb(111, 143, 82);
+  background: -o-rgb(111, 143, 82);
+  background: -ms-rgb(111, 143, 82);
+  background: -moz-rgb(111, 143, 82);
+  background: rgb(111, 143, 82);
+  color: white;
+}
+
+.downvoteBtn {
+  background: -webkit-linear-gradient(280deg, rgb(231, 76, 60) 0%, rgb(231, 76, 60) 96%);
+  background: -o-linear-gradient(280deg, rgb(231, 76, 60) 0%, rgb(231, 76, 60) 96%);
+  background: -ms-linear-gradient(280deg, rgb(231, 76, 60) 0%, rgb(231, 76, 60) 96%);
+  background: -moz-linear-gradient(280deg, rgb(231, 76, 60) 0%, rgb(231, 76, 60) 96%);
+  background: linear-gradient(170deg, rgb(231, 76, 60) 0%, rgb(231, 76, 60) 96%);
+  color: white;
+}
+
+.upvoted {
+  background: -webkit-rgb(111, 143, 82);
+  background: -o-rgb(111, 143, 82);
+  background: -ms-rgb(111, 143, 82);
+  background: -moz-rgb(111, 143, 82);
+  background: rgb(111, 143, 82);
+  color: white;
+}
+
+.reportBtn:hover, .quoteBtn:hover, .upvoteBtn:hover, .downvoteBtn:hover {
+  color: black;
+  border-color: #1c2431;
+}
+
+/*******************************************************************************
+                TO CHANGE
+********************************************************************************/
+
+.userProfilePic {
+  border-style: groove;
+  width: 150px;
+  height: 150px;
+}
+
+.postPicture {
+  width: 100%;
+  height: 300px;
+}
+
+.registerIcon {
+  padding-top: 10px;
+  padding-right: 8px;
+}
+
+#container, #navbar, #searchNav {
+    min-width: 1500px;
+}

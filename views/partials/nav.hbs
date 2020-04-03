@@ -1,0 +1,40 @@
+<!-- *******************************************  Navbar  ******************************************* !-->
+	<div class="navbar w-100 d-flex justify-content-between shadow-sm" id="navbar">
+		<a class="nav-link text-white">Foorum</a>
+		<!--
+		<div class="dropdown">
+			<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Dropdown Button</button>
+			<div class="dropdown-menu">
+				<a href="#" class="dropdown-item text-warning">Link</a>
+				<a href="#" class="dropdown-item text-warning">Link</a>
+			</div>
+		</div>
+		!-->
+		<button data-toggle="" class="navbarFeatures btn dropdown-toggle" data-target="#myAcc" id="myAccTag">My Account</button>
+	</div>
+	<div class="header text-dark p-3 float-right rounded-bottom shadow  position-relative border-bottom border-left" id="myAcc" style="display: none; z-index: 10; width:max-content">
+
+			<!-- *******************************************  User/Guest  ******************************************* !-->
+			<div>
+				{{#if session}}
+					<a href="/logout" class="btn btn-secondary"">Logout</a>
+					<a href="/overview" class="btn btn-light">My settings</a>
+				{{else}}
+					<a href="/login" class="btn btn-success">Login</a>
+					<a href="/register" class="btn btn-secondary">Register</a>
+				{{/if}}
+			</div>
+				
+	</div>
+
+
+
+	<!-- *******************************************  Sticky Search Navbar  ******************************************* !-->
+	<nav class="navbar w-100 position-absolute navbar-dark d-flex justify-content-end border-top" style="z-index: 1;" id="searchNav">
+		<a href="/home" class="nav-link navbarFeatures rounded mr-auto"><i class='fas fa-home' style='font-size:20px'></i></a>
+		<form class="form-inline px-3" action="#" id="searchForm" style="display: none;">
+			<input class="form-control mr-sm-2"  id="searchBox" type="text" placeholder="Search">
+			<button class="btn btn-success" id="searchBtn" type="submit">Search</button>
+		</form>
+		<button class="btn navbarFeatures " data-toggle="" data-target="#searchForm" id="searchIcon"><i class="fa fa-search" id="searchIcon"></i></button>
+	</nav>

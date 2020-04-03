@@ -1,0 +1,21 @@
+<!-- *******************************************  Content  ******************************************* !-->
+				</div>
+				<div class="pb-2 rounded-lg table my-2 contentContainer d-flex" style="min-width: 1000px;">
+					<div class="ml-3" style="display: grid; width:max-content; height: max-content;">
+						<img src="graphics/keiKobayashi.png" class="userProfilePic my-3 mr-3 shadow-sm">
+						
+						<div class="btn-group-vertical shadow-sm">
+							<a href="overview" class="btn btn-light border">Overview</a>
+							<a href="feed" class="btn btn-light border">Profile Feed</a>
+							<a href="followers" class="btn btn-light border">Followers</a>
+							<a href="following" class="btn btn-light border">Following</a>
+							
+						</div>
+					</div>
+					<!-- *******************************************  Profile Template  ******************************************* !-->
+					<div class="bg-light shadow-sm w-100 mt-3 mr-3" style="min-height: 500px;">
+						<div class="m-3" style="height: max-content; width: max-content; display: grid;">
+							<span class="h6">{{ name }}</span>
+							<span class="">Member since {{ joinDate }}</span>
+							<span class="postTime">Last active {{ lastActive }}</span>
+						</div>
