@@ -8,7 +8,7 @@
 
 								<div class="bg-secondary rounded w-25 mr-3 text-center">
 									<div class="font-weight-bold lead">{{ userScore }}</div>
-									<div class="mb-1">###</div>
+									<div class="mb-1">{{ userRating }}</div>
 								</div>
 							</div>
 
@@ -18,13 +18,32 @@
 									<span>Active Posts</span>
 									<span>Profile Views</span>
 									<span>Member Title</span>
+
+									{{#if location }}
+										<span>Location</span>
+									{{/if}}
+
+									{{#if about }}
+										<span>About Me</span>
+									{{/if}}
+
 								</div>
 								<div class="text-left mx-2" style="display: grid;">
 									<span>{{ groupTitle }}</span>
 									<span>{{ numPosts }}</span>
 									<span>{{ numViews }}</span>
 									<span>{{ memberTitle }}</span>
+
+									{{#if location }}
+										<span>{{ location }}</span>
+									{{/if}}
+
+									{{#if about }}
+										<span>{{ about }}</span>
+									{{/if}}
+
 								</div>
 							</div>
 						</div>
-					</div>
+						</div>
+						</div>

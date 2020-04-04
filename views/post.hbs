@@ -31,7 +31,11 @@
 					<!-- *******************************************  Reply Content  ******************************************* !-->
 					<div class="mx-2 rounded d-flex replyContent" style="min-height: 50px;">
 						<div class="replyProfile px-1 py-2">
-							<a href="overview"><img src="graphics/keiKobayashi.png" class="replyPic rounded"><br></a>
+							
+							<form action="/overview" method="POST">
+								<input type="hidden" name="profileUsername" id="profileUsername" value="admin">
+								<button type="submit" class="btn btn-light"><a href="overview"><img src="graphics/keiKobayashi.png" class="replyPic rounded"><br></a></button>
+							</form>
 								Member<br>
 								1 post
 						</div>
@@ -103,7 +107,18 @@
 					</div>
 				</div>
 
-				<div class="py-3" id="replyBox" style="display: none;">
+				{{#if session}}
+				<script type="text/javascript">
+					if ($(".upvoteBtn").attr('class') == 'btn mx-1 upvoteBtn btn-disabled') {
+    $('.upvoteBtn').removeClass('btn-disabled');
+    $('.downvoteBtn').removeClass('btn-disabled');
+  }
+  else {
+    $('.upvoteBtn').addClass('btn-disabled');
+    $('.downvoteBtn').removeClass('btn-disabled');
+  }
+				</script>
+				<div class="py-3" id="replyBox">
 					<!-- *******************************************  Reply Box  ******************************************* !-->
 					<div class="replyContent mx-2 rounded d-flex" style="min-height: 50px; height: max-content;">
 						<div class="p-3 d-flex" style="height: max-content">
@@ -122,6 +137,7 @@
 						</div>
 					</div>
 				</div>
+				{{/if}}
 					
 
 

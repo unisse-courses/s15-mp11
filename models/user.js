@@ -15,7 +15,9 @@ const userSchema = new mongoose.Schema({
     groupTitle: { type: String, default: 'Member' },
     followers: [Number],
     following: [Number],
-    img: { type: String, default: 'default'}
+    img: { type: String, default: 'default'},
+    location: { type: String, required: false},
+    aboutMe: { type: String, required: false}
   }
 );
 
@@ -40,6 +42,12 @@ exports.getById = function(id, next) {
 // Retrieving just ONE user based on a query (first one)
 exports.getOne = function(query, next) {
   User.findOne(query, function(err, user) {
+    next(err, user);
+  });
+};
+
+exports.findOneAndUpdate = function(query, update, opt, next) {
+  User.findOneAndUpdate(query, update, opt, function(err, user) {
     next(err, user);
   });
 };

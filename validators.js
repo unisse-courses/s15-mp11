@@ -31,5 +31,12 @@ const loginValidation = [
   body('password').not().isEmpty().withMessage("Password is required.")
 ];
 
+const updateAccountValidation = [
+  // Confirm Password needs to be min 6 chars AND must match the req.body.password field
+
+  // Password needs to be min 8 chars
+  body('newPass').isLength({ min: 8 }).withMessage("New password must be at least 8 characters long."),
+];
+
 // update exports
-module.exports = { registerValidation, loginValidation };
+module.exports = { registerValidation, loginValidation, updateAccountValidation };

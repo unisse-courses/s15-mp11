@@ -19,20 +19,7 @@ function toggleSearch(target) {
     $("#searchForm").show();
 }
 
-function switchLogin() {
-  if (document.getElementById("login").style.display == 'block') {
-    document.getElementById("login").style.display = 'none';
-    document.getElementById("logout").style.display = 'block';
-  }
-  else {
-    document.getElementById("logout").style.display = 'none';
-    document.getElementById("login").style.display = 'block';
-  }
-}
-
 function postFeatureToggle() {
-  //$(".reportBtn").toggle();
-  //$(".quoteBtn").toggle();
   $("#replyBox").toggle();
   switchLogin();
   if ($(".upvoteBtn").attr('class') == 'btn mx-1 upvoteBtn btn-disabled') {
@@ -84,16 +71,6 @@ function vote(field, type) {
   $(field).siblings(".upvoteCount").addClass("upvoted");
 }
 
-function switchProfileView(target) {
-  var str = target.replace("Btn", "");
-  document.getElementById("overview").style.display = "none";
-  document.getElementById("followers").style.display = "none";
-  document.getElementById("following").style.display = "none";
-
-  document.getElementById(str).style.display = "block";
-}
-
-
 $(document).ready(function() {
     $(".reportBtn").click(function() {
       var string = $(this).parents(".userContainer").children(".postID").val();
@@ -115,11 +92,11 @@ $(document).ready(function() {
     });
 
     $("#createPost").click(function() {
-      alert();
+
     });
 
     $("#postBtn").click(function() {
-      alert();
+
     });
 
     $(document).click(function(evt) {

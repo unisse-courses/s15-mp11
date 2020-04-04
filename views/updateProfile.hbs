@@ -1,0 +1,39 @@
+<div class="container">
+	<div class="w-50 mx-auto pb-5">
+		<div class="">
+			<h3>Update Profile Information</h3>
+			<form action="/updateProfile" method="POST" id="profileForm">
+				<div class="form-group">
+					<label for="location">Location</label>
+					<input type="text" class="form-control" name="location" id="location" placeholder="Location">
+				</div>
+				<div class="form-group">
+					<label for="about">About Me</label>
+					<textarea class="ta w-100 form-control" name="about" id="about" form="profileForm" placeholder="....." style="height: 150px;"></textarea>
+				</div>
+				<button type="submit" class="btn btn-success float-right">Submit</button>
+			</form>
+		</div>
+		<div class="py-5">
+			<h3>Update Password</h3>
+
+			{{> messages }}
+
+			<form action="/updateAccount" method="POST">
+				<div class="form-group">
+					<label for="oldPass">Old Password</label>
+					<input type="password" class="form-control" name="oldPass" id="oldPass" placeholder="Old password">
+				</div>
+				<div class="form-group">
+					<label for="conPass">Confirm Password</label>
+					<input type="password" class="form-control" name="conPass" id="conPass" placeholder="Confirm password">
+				</div>
+				<div class="form-group">
+					<label for="newPass">New Password</label>
+					<input type="password" class="form-control" name="newPass" id="newPass" placeholder="New password">
+				</div>
+				<button type="submit" class="btn btn-success float-right">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>
