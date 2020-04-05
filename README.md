@@ -1,11 +1,15 @@
 # CCAPDEV Project: Foorum (food forum)
 
-This is based off on the [`node-mongoose-sample`](https://github.com/unisse-courses/node-mongoose-sample) repository but using [Materialize](https://materializecss.com/) as the CSS design framework.
+This is a project submission for the course CCAPDEV. The application facilitates a food forum where users can
+* Create an account
+* Start a topic (post)
+* Comment on topics
+* Follow other accounts
+The implementation of MVC is already used in order to make the application scalable and easier to modify.
 
 ## Requirements
 * [NodeJS & npm](https://www.npmjs.com/get-npm)
 * [MongoDB Community Edition](https://docs.mongodb.com/manual/administration/install-community/) (Must be running in the background)
-* [Postman](https://www.postman.com/) - To be able to test the endpoints
 * Any text editor for JavaScript, HTML & CSS (VSCode, Atom, SublimeText, etc.)
 
 ## Pre-Setup
@@ -26,11 +30,30 @@ This is based off on the [`node-mongoose-sample`](https://github.com/unisse-cour
 5. Navigate to [http://localhost:3000/](http://localhost:3000/) where you will be redirected to the home page showing all current posts
 
 ## User Accounts
+Users are given the option to register their own accounts. Listed below are existing user accounts and their credentials:
 1. Username: `martin`
 2. Username: `adrian`
 3. Username: `kyla`
 4. Username: `password`
 * Each account has the same password of `password`
+
+## Functionalities to follow (for Phase 3)
+* Deployment using heroku
+* Enhanced input validation and error messages
+* Search function
+* Implement post viewing based on category
+* Display post sorted based on:
+- number of views
+- number of comments
+- score of the post (vote score of the first comment)
+* Store image in DB
+* Update user picture
+* Read user information for individual post comments
+* Update comment vote score
+* Update post picture
+* Delete post 
+* Delete comment
+
 
 ## Team Members:
 
