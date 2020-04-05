@@ -1,7 +1,6 @@
 const mongoose = require('./connection');
 
 const postSchema = new mongoose.Schema({
-    postID: { type: String, required: true },
     category: { type: String, required: true },
     title: { type: String, required: true },
     numViews: { type: Number, default: 0},
@@ -9,11 +8,13 @@ const postSchema = new mongoose.Schema({
     img: { type: String, required: false },
     postTime: { type: Date, default: Date.now },
     comments: [{
-      commentID: Number,
-      postTime: Date,
-      voteScore: Number,
-      content: String,
-      authorUsername: String
+      commentID: { type: Number },
+      postTime: { type: Date },
+      voteScore: { type: Number },
+      content: { type: String },
+      authorUsername:{ type: String },
+      authorURL: { type: String },
+      authorIMG: { type: String }
     }],
     url: { type: String, required: false }
   }
@@ -62,3 +63,15 @@ exports.findOneAndUpdate = function(query, update, opt, next) {
     next(err, post);
   });
 };
+
+exports.updateComment = function(query, update, opt, next) {
+  Post.update(query, update, opt, function(err, post) {
+    next(err, post);
+  });
+};
+
+exports.deleteOne = function(filter, next) {
+  Post.remove(filter, function(err, status) {
+    next(err, status);
+  });
+}

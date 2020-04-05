@@ -13,7 +13,8 @@ exports.isPublic = (req, res, next) => {
   if (req.session.user) {
     res.render('home', {
       session: req.session.username,
-      name: req.session.name
+      name: req.session.name,
+      url: req.session.url
     });
   } 
   else {

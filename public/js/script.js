@@ -72,6 +72,24 @@ function vote(field, type) {
 }
 
 $(document).ready(function() {
+    $("#postTitle").change(function() {
+      $("#postTitleHolder").val($(this).val());
+    });
+    $("#postCategory").change(function() {
+      var src = '/graphics/resto/' + $(this).children("option:selected").val() +'.jpg';
+      $("#picURL").val(src);
+      $("#postPicture").attr('src', src)
+    });
+    $("#customPicture").change(function() {
+      var file = $("#customPicture");
+      if (file.prop('files') && file.prop('files')[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $("#postPicture").attr('src', e.target.result)
+        }
+        reader.readAsDataURL(file.prop('files')[0]);
+      }
+    });
     $(".reportBtn").click(function() {
       var string = $(this).parents(".userContainer").children(".postID").val();
       alert(string);

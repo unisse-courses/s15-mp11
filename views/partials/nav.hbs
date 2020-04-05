@@ -1,6 +1,6 @@
 <!-- *******************************************  Navbar  ******************************************* !-->
 	<div class="navbar w-100 d-flex justify-content-between shadow-sm" id="navbar">
-		<a class="nav-link text-white">Foorum</a>
+		<a class="nav-link text-white text-uppercase" style="font-size:24px; letter-spacing: 0.1em;">Foorum</a>
 		<!--
 		<div class="dropdown">
 			<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Dropdown Button</button>
@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		!-->
-		<button data-toggle="" class="navbarFeatures btn dropdown-toggle" data-target="#myAcc" id="myAccTag">My Account</button>
+		<button data-toggle="" class="navbarFeatures btn dropdown-toggle text-uppercase" style="font-size:18px; letter-spacing: 0.1em;" data-target="#myAcc" id="myAccTag">My Account</button>
 	</div>
 	<div class="header text-dark p-3 float-right rounded-bottom shadow  position-relative border-bottom border-left" id="myAcc" style="display: none; z-index: 10; width:max-content">
 
@@ -18,12 +18,11 @@
 			<div style="display: grid; min-width: 150px;">
 				{{#if session}}
 					<span class="mx-auto h5 text-white">{{ name }}</span>
-					<img src="/graphics/default.PNG" style="height: 150px; width: 150px;">
+					<img src="/graphics/default.PNG" class="userProfilePic" style="height: 150px; width: 150px;">
 					<a href="/logout" class="btn btn-secondary my-2">Logout</a>
-					<form action="/overview" method="POST" class="w-100">
-						<input type="text" name="profileUsername" id="profileUsername" value="{{ session }}" style="display: none;">
-						<button type="submit" class="btn btn-light w-100">My settings</a>
-					</form>
+					<div class="w-100">
+						<a type="submit" class="btn btn-light w-100" href="/profile/{{url}}/overview">My settings</a>
+					</div>
 				{{else}}
 					<a href="/login" class="btn btn-success mb-2">Login</a>
 					<a href="/register" class="btn btn-secondary">Register</a>

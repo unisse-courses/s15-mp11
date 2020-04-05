@@ -10,8 +10,7 @@ exports.registerUser = (req, res) => {
 
     // Hash password
     bcrypt.hash(password, saltRounds, (err, hashed) => {
-      var temp = 'profile/';
-      temp += name;
+      var temp = username;
       const newUser = {
         name: name,
         email: email,
@@ -40,7 +39,6 @@ exports.registerUser = (req, res) => {
 
     userModel.getOne({ email: email }, (err, result) => {
       if (result) {
-        console.log(result);
         // found a match, return to login with error
         req.flash('error_msg', 'User already exists. Please login.');
         res.redirect('/login');
@@ -80,6 +78,8 @@ exports.loginUser = (req, res) => {
               req.session.user = user._id;
               req.session.name = user.name;
               req.session.username = user.username;
+              req.session.url = user.url;
+              req.session.img = user.img;
 
               var query = {
                 username: req.session.username
@@ -90,9 +90,7 @@ exports.loginUser = (req, res) => {
               userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
                 if (err) throw err;
 
-                console.log(result);
               });
-              console.log(update);
 
               res.redirect('/');
               
@@ -130,9 +128,8 @@ exports.logoutUser = (req, res) => {
     userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
       if (err) throw err;
 
-      console.log(result);
     });
-    console.log(update);
+
     req.session.destroy(() => {
       res.clearCookie('connect.sid');
       res.redirect('/');
@@ -140,81 +137,11 @@ exports.logoutUser = (req, res) => {
   }
 };
 
-exports.displayProfile = (req, res) => {
-  var { profileUsername } = req.body;
-  req.session.viewProfile = profileUsername;
-  userModel.getOne({ username: req.session.viewProfile }, (err, result) => {
-    if (result) {
-      var userRating = '';
-      if (result.userScore >= 80 && result.userScore <= 120)
-        userRating = 'Good';
-      else if (result.userScore >= 40 && result.userScore <= 80)
-        userRating = 'Neutral';
-      else if (result.userScore < 40)
-        userRating = 'Bad';
-      else
-        userRating = 'Outstanding';
-      // found a match, return to login with error
-      if (req.session.username == profileUsername) {
-        res.render('overview', {
-          name: result.name,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: profileUsername,
-          session: req.session.username,
-          update: 'true',
-          location: result.location,
-          about: result.aboutMe
-        });
-      }
-      else if (req.session.username) {
-        res.render('overview', {
-          name: result.name,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: profileUsername,
-          session: req.session.username,
-          location: result.location,
-          about: result.aboutMe
-        });
-      }
-      else {
-        res.render('overview', {
-          name: result.name,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: profileUsername,
-          location: result.location,
-          about: result.aboutMe
-        });
-      }
-    }
-    else {
-      console.log('NO MATCH FOUND!');
-    }
-  });
-};
-
 exports.displayOverview = (req, res) => {
-  userModel.getOne({ username: req.session.viewProfile }, (err, result) => {
+  var queryProfile = {
+    username: req.params.username
+  };
+  userModel.getOne(queryProfile, (err, result) => {
     if (result) {
       var userRating = '';
       if (result.userScore >= 80 && result.userScore <= 120)
@@ -225,10 +152,28 @@ exports.displayOverview = (req, res) => {
         userRating = 'Bad';
       else
         userRating = 'Outstanding';
-      // found a match, return to login with error
-      if (req.session.username == req.session.viewProfile) {
+
+      // update num views
+      var incViews = result.numViews;
+      incViews++;
+
+      var update = {
+        $set: { numViews: incViews }
+      }
+
+      userModel.findOneAndUpdate(queryProfile, update, {new:true}, (err, post1) => {
+        if (err) 
+          throw err;
+        else {
+          post1.save(post1);
+
+        }
+      });
+
+      if (req.session.username === result.username) {
+        console.log('1');
         res.render('overview', {
-          name: result.name,
+          name: req.session.username,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -237,33 +182,77 @@ exports.displayOverview = (req, res) => {
           numPosts: result.numPosts,
           numViews: result.numViews,
           memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
+          username: req.session.username,
           session: req.session.username,
+          profileURL: result.url,
+          url: req.session.url,
+          img: result.img,
           update: 'true',
           location: result.location,
           about: result.aboutMe
         });
       }
-      else if (req.session.username) {
-        res.render('overview', {
-          name: result.name,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
-          session: req.session.username,
-          location: result.location,
-          about: result.aboutMe
+      else if (req.session.username !== result.username && req.session.username) {
+        console.log('2');
+        var query = {
+            $and: [ { followers: { $elemMatch: { followerUsername: req.session.username, followerName: req.session.name } } },
+            {username: result.username} ]
+        };
+        console.log(result.username);
+        userModel.getOne(query, (err, addResult) => {
+          if (addResult) {
+            // dont
+            console.log(addResult);
+            res.render('overview', {
+              name: req.session.username,
+              joinDate: result.joinDate,
+              lastActive: result.lastActive,
+              userScore: result.userScore,
+              userRating: userRating,
+              groupTitle: result.groupTitle,
+              numPosts: result.numPosts,
+              numViews: result.numViews,
+              memberTitle: result.memberTitle,
+              username: result.username,
+              session: result.name,
+              profileURL: result.url,
+              url: req.session.url,
+              img: result.img,
+              location: result.location,
+              about: result.aboutMe,
+            });
+          } 
+          else {
+            console.log('2');
+            console.log(err);
+            res.render('overview', {
+              name: req.session.name,
+              joinDate: result.joinDate,
+              lastActive: result.lastActive,
+              userScore: result.userScore,
+              userRating: userRating,
+              groupTitle: result.groupTitle,
+              numPosts: result.numPosts,
+              numViews: result.numViews,
+              memberTitle: result.memberTitle,
+              username: req.params.username,
+              session: req.session.username,
+              profileURL: result.url,
+              url: req.session.url,
+              img: result.img,
+              location: result.location,
+              about: result.aboutMe,
+              addUser: result.username,
+              addName: result.name,
+              addImg: result.img,
+              addURL: result.url
+            });
+          }
         });
       }
       else {
+        console.log('3');
         res.render('overview', {
-          name: result.name,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -272,25 +261,29 @@ exports.displayOverview = (req, res) => {
           numPosts: result.numPosts,
           numViews: result.numViews,
           memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
+          username: req.params.username,
           location: result.location,
+          profileURL: result.url,
+          img: result.img,
           about: result.aboutMe
         });
       }
     }
-    else {
-      console.log('NO MATCH FOUND!');
-    }
+  else {
+    console.log('NO MATCH FOUND!');
+  }
   });
 };
 
 exports.displayFollowers = (req, res) => {
-  userModel.getOne({ username: req.session.viewProfile }, (err, result) => {
+  var query = {
+    username: req.params.username
+  };
+  userModel.getOne(query, (err, result) => {
     if (result) {
-      // found a match, return to login with error
-      if (req.session.username) {
+      if (!req.session.username) {
         res.render('followers', {
-          name: result.name,
+          name: req.session.username,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -298,13 +291,14 @@ exports.displayFollowers = (req, res) => {
           numPosts: result.numPosts,
           numViews: result.numViews,
           memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
-          session: req.session.username
+          followers: result.followers,
+          img: result.img,
+          profileURL: result.url,
         });
       }
       else {
         res.render('followers', {
-          name: result.name,
+          name: req.session.username,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -313,6 +307,12 @@ exports.displayFollowers = (req, res) => {
           numViews: result.numViews,
           memberTitle: result.memberTitle,
           username: req.session.viewProfile,
+          followers: result.followers,
+          profileURL: result.url,
+          url: req.session.url,
+          username: req.session.viewProfile,
+          session: req.session.username,
+          img: result.img,
         });
       }
     }
@@ -323,12 +323,14 @@ exports.displayFollowers = (req, res) => {
 };
 
 exports.displayFollowing = (req, res) => {
-  userModel.getOne({ username: req.session.viewProfile }, (err, result) => {
+  var query = {
+    username: req.params.username
+  };
+  userModel.getOne(query, (err, result) => {
     if (result) {
-      // found a match, return to login with error
-      if (req.session.username) {
+      if (!req.session.username) {
         res.render('following', {
-          name: result.name,
+          name: req.session.username,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -337,12 +339,14 @@ exports.displayFollowing = (req, res) => {
           numViews: result.numViews,
           memberTitle: result.memberTitle,
           username: req.session.viewProfile,
-          session: req.session.username
+          following: result.following,
+          img: result.img,
+          profileURL: result.url,
         });
       }
       else {
         res.render('following', {
-          name: result.name,
+          name: req.session.username,
           joinDate: result.joinDate,
           lastActive: result.lastActive,
           userScore: result.userScore,
@@ -351,6 +355,11 @@ exports.displayFollowing = (req, res) => {
           numViews: result.numViews,
           memberTitle: result.memberTitle,
           username: req.session.viewProfile,
+          following: result.following,
+          profileURL: result.url,
+          url: req.session.url,
+          session: req.session.username,
+          img: result.img,
         });
       }
     }
@@ -365,31 +374,45 @@ exports.updateProfile = (req, res) => {
   var query = {
     username: req.session.username
   };
-
+  var usr = req.params.username;
   var update = {
     $set: { location: location, aboutMe: about }
   };
 
-  console.log(query);
-  console.log(update);
   userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
-  if (err) throw err;
-  
-    res.render('overview', {
-      name: result.name,
-      joinDate: result.joinDate,
-      lastActive: result.lastActive,
-      userScore: result.userScore,
-      groupTitle: result.groupTitle,
-      numPosts: result.numPosts,
-      numViews: result.numViews,
-      memberTitle: result.memberTitle,
-      username: req.session.username,
-      session: req.session.username,
-      update: 'true',
-      location: result.location,
-      about: result.aboutMe
-    });
+    if (err) throw err;
+    
+    else {
+      result.save(result);
+      var userRating = '';
+      if (result.userScore >= 80 && result.userScore <= 120)
+        userRating = 'Good';
+      else if (result.userScore >= 40 && result.userScore <= 80)
+        userRating = 'Neutral';
+      else if (result.userScore < 40)
+        userRating = 'Bad';
+      else
+        userRating = 'Outstanding';
+
+      res.render('overview', {
+        name: result.name,
+        joinDate: result.joinDate,
+        lastActive: result.lastActive,
+        userScore: result.userScore,
+        groupTitle: result.groupTitle,
+        numPosts: result.numPosts,
+        numViews: result.numViews,
+        memberTitle: result.memberTitle,
+        username: req.session.username,
+        session: req.session.username,
+        url: req.session.url,
+        update: 'true',
+        location: result.location,
+        about: result.aboutMe,
+        userRating: userRating,
+        img: result.img,
+      });
+    };
   });
 };
 
@@ -421,12 +444,12 @@ exports.updateAccount = (req, res) => {
           memberTitle: result.memberTitle,
           username: req.session.username,
           session: req.session.username,
+          url: req.session.url,
           update: 'true',
           location: result.location,
-          about: result.aboutMe
+          about: result.aboutMe,
+          img: result.img,
         });
-
-        console.log(result);
       });
     });
 
@@ -439,19 +462,60 @@ exports.updateAccount = (req, res) => {
   }
 };
 
-exports.updateLastActive = (req, res) => {
+exports.followUser = (req, res) => {
+  // follow the user
+  var { addURL } = req.body;
+  var url = addURL + '/overview';
   var query = {
     username: req.session.username
   };
-  var update = {
-    $set: { lastActive: Date.now }
+  var { addUsername, addName, addImg } = req.body;
+  var person = {
+    followingUsername: addUsername,
+    followingName: addName,
+    img: addImg
   };
-  userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
-    if (err) throw err;
+  userModel.getOne(query, function(err, result)  {
+    if (err) 
+      throw err;
 
-    res.redirect('/');
+    else {
+      result.following.push(person);
+      result.save(result);
 
-    console.log(result);
+      // add the user to the others follower list
+      var query1 = {
+        username: addUsername
+      };
+      var person1 = {
+        followerUsername: result.username,
+        followerName: result.name,
+        img: result.img
+      };
+
+      userModel.getOne(query1, function(err, result1)  {
+        if (err) 
+          throw err;
+        else {
+          result1.followers.push(person1);
+          result1.save(result1);
+
+          res.redirect('/');
+        }
+      });
+    }
   });
-  console.log(update);
+
+};
+
+exports.deleteUser = (req, res) => {
+  var query = {
+    
+  };
+  userModel.deleteOne(query, (err, status) => {
+    if (err) 
+      throw err;
+      
+    res.redirect('/home');
+  });
 };

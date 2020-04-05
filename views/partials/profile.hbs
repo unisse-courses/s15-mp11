@@ -1,14 +1,13 @@
 <!-- *******************************************  Content  ******************************************* !-->
 				<div class="pb-2 rounded-lg table my-2 contentContainer d-flex" style="min-width: 1000px;">
 					<div class="ml-3" style="display: grid; width:max-content; height: max-content;">
-						<img src="graphics/keiKobayashi.png" class="userProfilePic my-3 mr-3 shadow-sm">
+						<img src="{{img}}" class="userProfilePic my-3 mr-3 shadow-sm">
 						
 						<div class="btn-group-vertical shadow-sm">
 							
-							<a href="overview" class="btn btn-light border">Overview</a>
-							<a href="feed" class="btn btn-light border">Profile Feed</a>
-							<a href="followers" class="btn btn-light border">Followers</a>
-							<a href="following" class="btn btn-light border">Following</a>
+							<a href="/profile/{{profileURL}}/overview" class="btn btn-light border">Overview</a>
+							<a href="/profile/{{profileURL}}/followers" class="btn btn-light border">Followers</a>
+							<a href="/profile/{{profileURL}}/following" class="btn btn-light border">Following</a>
 
 								
 								
@@ -20,7 +19,7 @@
 					<div class="bg-light shadow-sm w-100 mt-3 mr-3" style="min-height: 500px;">
 						<div class="d-flex">
 							<div class="m-3 mr-auto" style="height: max-content; width: max-content; display: grid;">
-								<span class="h6">{{ name }}</span>
+								<span class="h6">{{ username }}</span>
 								<span class="">Member since {{ joinDate }}</span>
 								<span class="postTime">Last active {{ lastActive }}</span>
 							</div>
@@ -30,6 +29,18 @@
 									<a class="btn btn-success mt-5 mr-3 border" href="updateProfile">Update My Profile</a>
 								</div>
 							{{/if }}
+
+							{{#if addUser }}
+								<form action="/followUser" method="POST">
+									<div class="float-right">
+										<input type="hidden" name="addURL" id="addURL" value="{{ addURL }}">
+										<input type="hidden" name="addUsername" id="addUsername" value="{{ addUser }}">
+										<input type="hidden" name="addName" id="addName" value="{{ addName }}">
+										<input type="hidden" name="addImg" id="addImg" value="{{ addImg }}">
+										<button class="btn btn-primary mt-5 mr-3 border">Follow</button>
+									</div>
+								</form>
+							{{/if}}
 						</div>
 							
 

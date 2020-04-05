@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
+const postController = require('../controllers/postController');
 
 // Update the import to include the new loginValidation
 const { registerValidation, loginValidation } = require('../validators.js');
@@ -23,9 +24,9 @@ router.get('/register', isPublic, (req, res) => {
 
 // POST methods for form submissions
 router.post('/register', isPublic, registerValidation, userController.registerUser);
-router.post('/login', isPublic, loginValidation, userController.loginUser, userController.updateLastActive);
+router.post('/login', loginValidation, userController.loginUser, postController.displayPosts);
 
 // logout
-router.get('/logout', isPrivate, userController.logoutUser, userController.updateLastActive);
+router.get('/logout', isPrivate, userController.logoutUser);
 
 module.exports = router;

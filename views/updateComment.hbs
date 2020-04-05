@@ -1,0 +1,61 @@
+<div class="">
+	<div class="mx-auto pb-5" style="width: 90%">
+		<div class="">
+			<h5>Update Comment</h5>
+			<label for="initial">Initial</label>
+			<div class="pb-2 rounded-lg table contentContainer" style="min-height: max-content;">
+				<div class="rounded-sm px-3 py-1 mb-2 repliesHeader" style="height: 35px;">
+				{{incReply}} replies to this topic
+				</div>
+
+				<!-- *******************************************  Reply Table  ******************************************* !-->
+					<!-- *******************************************  User Reply  ******************************************* !-->
+				<div class="w-100 userContainer">
+					<input type="hidden" class="postID" value="0">
+					<div class="rounded-sm px-2 mx-2 d-flex userReply" style="height: 35px;">
+							<p class="replyUsername mr-auto h-100 py-1" style="width: max-content;">{{username}}</p>
+							<p class="lead h-100" style="font-size: 12px; padding-top: 7px; width: max-content;">#{{commentID}}</p>
+					</div>
+
+
+					<!-- *******************************************  Reply Content  ******************************************* !-->
+					<div class="mx-2 rounded d-flex replyContent" style="min-height: 50px;">
+						<div class="replyProfile px-1 py-2">
+								<a href="/profile/{{authorURL}}/overview"><img src="graphics/keiKobayashi.png" class="replyPic rounded"><br></a>
+								Member<br>
+								1 post
+						</div>
+						<div class="px-3 w-100">
+							<div class="py-1 d-flex">
+								<p class="postTime mr-auto">Posted {{postTime}}</p>
+								<!--
+								<button class="btn mx-1 reportBtn" id="reportBtn" style="display: none;">Report</button>
+								<button class="btn quoteBtn" id="quoteBtn" style="display: none;">Quote</button>
+								!-->
+							</div>
+
+							<div class="d-flex userMessage">
+								{{content}}
+							</div>
+							<div class="my-3 d-flex" style="height: max-content;">
+								<div class="mr-auto"></div>
+								<button class="btn downvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-down"></i></button>
+								<button class="btn mx-1 upvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-up"></i></button>
+								<div class="upvoteCount" id="upvoteCount">{{score}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<form action="/updateComment" method="POST" id="editComment">
+				<div class="form-group w-75 mx-auto">
+					<label for="about">New Content</label>
+					<input type="hidden" id="comID" name="comID" value="{{commentID}}">
+					<input type="hidden" id="url" name="url" value="{{url}}">
+					<textarea class="ta w-100 form-control" name="newContent" id="newContent" form="editComment" placeholder="Insert your message here....." style="height: 150px;"></textarea>
+					<button type="submit" class="btn btn-success float-right my-2">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

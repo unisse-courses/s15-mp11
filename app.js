@@ -5,6 +5,10 @@ const exphbs = require('express-handlebars');
 const handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('./models/connection');
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
+const fs = require('fs');
+const multer = require('multer');
+
 
 // Routes imports
 const authRouter = require('./routes/auth');
@@ -12,7 +16,7 @@ const indexRouter = require('./routes/index');
 
 // Creates the express application
 const app = express();
-const port = 9090;
+const port = 3000;
 
 // Configure to use sessions
 const session = require('express-session');
@@ -26,10 +30,55 @@ app.listen(port, () => {
 
 // Creates an engine called "hbs" using the express-handlebars package.
 app.engine('hbs', exphbs({
+  handlebars: allowInsecurePrototypeAccess(handlebars),
   extname: 'hbs',
   defaultView: 'main',
   layoutsDir: path.join(__dirname, '/views/layouts'),
   partialsDir: path.join(__dirname, '/views/partials'),
+  helpers: {
+    grouped_each: function(freq, context, options) {
+      var out = "", subcontext = [], i;
+      if (context && context.length > 0) {
+          for (i = 0; i < context.length; i++) {
+              if (i > 0 && i % freq === 0) {
+                  out += options.fn(subcontext);
+                  subcontext = [];
+              }
+              subcontext.push(context[i]);
+          }
+          out += options.fn(subcontext);
+      }
+      return out;
+    },
+    validateUserComment: function(lvalue, rvalue, options) {
+      if (arguments.length < 3)
+          throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+
+      operator = options.hash.operator || "==";
+
+      var operators = {
+          '==':       function(l,r) { return l == r; },
+          '===':      function(l,r) { return l === r; },
+          '!=':       function(l,r) { return l != r; },
+          '<':        function(l,r) { return l < r; },
+          '>':        function(l,r) { return l > r; },
+          '<=':       function(l,r) { return l <= r; },
+          '>=':       function(l,r) { return l >= r; },
+          'typeof':   function(l,r) { return typeof l == r; }
+      }
+
+      if (!operators[operator])
+          throw new Error("Handlerbars Helper 'compare' doesn't know the operator "+operator);
+
+      var result = operators[operator](lvalue,rvalue);
+
+      if( result ) {
+          return options.fn(this);
+      } else {
+          return options.inverse(this);
+      }
+    }
+  }
 }));
 
 // Setting the view engine to the express-handlebars engine we created

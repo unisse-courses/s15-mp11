@@ -2,7 +2,7 @@
 	<div class="w-50 mx-auto pb-5">
 		<div class="">
 			<h3>Update Profile Information</h3>
-			<form action="/updateProfile" method="POST" id="profileForm">
+			<form action="/profile/:username/updateProfile" method="POST" id="profileForm">
 				<div class="form-group">
 					<label for="location">Location</label>
 					<input type="text" class="form-control" name="location" id="location" placeholder="Location">
@@ -19,7 +19,7 @@
 
 			{{> messages }}
 
-			<form action="/updateAccount" method="POST">
+			<form action="/profile/:username/updateAccount" method="POST">
 				<div class="form-group">
 					<label for="oldPass">Old Password</label>
 					<input type="password" class="form-control" name="oldPass" id="oldPass" placeholder="Old password">

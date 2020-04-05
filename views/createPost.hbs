@@ -3,20 +3,21 @@
 		<div class="">
 			<h3>Start A Topic</h3>
 			<form action="/createPost" method="POST" id="createPostForm">
+				<input type="hidden" id="picURL" name="picURL" value="">
 				<div class="form-group">
-					<label for="title" class="h6">Title</label>
-					<input type="text" class="form-control" name="title" id="title" placeholder="Title">
+					<label for="postTitle" class="h6">Title</label>
+					<input type="text" class="form-control" name="postTitle" id="postTitle" placeholder="Title">
 				</div>
 				<div class="form-group">
 					<label for="category" class="h6">Category</label>
-					<select class="form-control" id="category" name="category">
+					<select class="form-control" id="postCategory" name="postCategory">
 						<option value="" disabled selected>Select category....</option>
-						<option value="Japanese">Japanese</option>
-						<option value="American">American</option>
-						<option value="Filipino">Filipino</option>
-						<option value="Chinese">Chinese</option>
-						<option value="French">French</option>
-						<option value="Others">Others</option>
+						<option value="japanese">Japanese</option>
+						<option value="american">American</option>
+						<option value="filipino">Filipino</option>
+						<option value="chinese">Chinese</option>
+						<option value="french">French</option>
+						<option value="others">Others</option>
 					</select>
 				</div>
 				<div class="form-group" style="width:max-content;">
@@ -36,16 +37,16 @@
 		<div class="w-100 mt-4">
 			<div class="card h-100 shadow border border-dark">
 				<div class="card-img-top">
-					<img src="" class="postPicture">
+					<img src="" class="postPicture" id="postPicture" name="postPicture">
 				</div>
 				<div class="card-footer contentContainer flex-fill border-top border-dark rounded-bottom">
 					<div class="d-flex">
 						<div class="w-100">
-							<div class="font-weight-bold">Title</div>
-							<div class="">By: Author</div>
+							<input type="text" class="font-weight-bold form-control-plaintext" id="postTitleHolder" name="postTitleHolder" value="" placeholder="Title" disabled>
+							<div class="">By: {{session}}</div>
 						</div>
 						<span class="mr-auto"></span>
-						<div class="d-flex">
+						<div class="d-flex mt-2">
 							<div class="d-flex mx-2">
 								<p>0</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
 							</div>
@@ -55,7 +56,6 @@
 						</div>
 					</div>
 				</div>
-				<a href="#" class="stretched-link"></a>
 			</div>
 		</div>
 	</div>

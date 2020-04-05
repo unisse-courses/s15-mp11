@@ -12,240 +12,70 @@
 							</select>
 						</div>
 						<div class="d-flex list-group list-group-horizontal" style="width: max-content;">
-							<a href="#" class="list-group-item list-group-item-action bg-dark text-white" style="width: max-content;">Hot</a>
-							<a href="#" class="list-group-item list-group-item-action" style="width: max-content;">New</a>
-							<a href="#" class="list-group-item list-group-item-action" style="width: max-content;">Top</a>
+							<a href="#" class="list-group-item list-group-item-action bg-dark text-white text-center" style="width: 120px;">Hot</a>
+							
 
 						</div>
 						{{#if session}}
-							<button class="btn btn-dark float-right" id="createPost" style="width: max-content; margin-top: -38px;">Start New Topic</button>
+							<a class="btn btn-dark float-right" id="createPost" style="width: max-content; margin-top: -38px;" href="createPost"><svg class="bi bi-plus-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px; margin-top: -3px;">
+  <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+  <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
+  <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+</svg>Start New Topic</a>
 						{{/if}}	
 					</div>
 						
 				<div class="mx-auto bg-secondary pt-1 mb-5 rounded-lg" style="width: 95%;"></div>
 
 				<!-- *******************************************  Topics  ******************************************* !-->
-				<div class="row mb-3 mx-auto" style="width: 95%;">
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/yushoken.jpg" class="postPicture">
+				<div id="">
+							<div class="w-100" style="height: max-content;">
+										
+								<table class="table table-borderless mx-auto" style="width: 92%;">
+									<tr class="">
+										<td class="w-25"></td>
+										<td class="w-25"></td>
+										<td class="w-25"></td>
+										<td class="w-25"></td>
+									</tr>
+										
+									{{#if posts }}
+										{{#grouped_each 4 posts }}
+											<tr>
+												{{#each this }}
+													<td>
+														<div class="card border border-dark h-100 shadow">
+															<div class="card-img-top">
+																<img src="{{img}}" class="postPicture">
+															</div>
+															<div class="card-footer contentContainer flex-fill border-top border-dark rounded-bottom">
+																<div class="d-flex">
+																	<div class="w-100">
+																		<div class="font-weight-bold">{{ title }}</div>
+																		<div class="">By: {{ this.comments.[0].authorUsername }}</div>
+																	</div>
+																	<span class="mr-auto"></span>
+																	<div class="d-flex">
+																		<div class="d-flex mx-2">
+																			<p>{{ numReplies }}</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
+																		</div>
+																		<div class="d-flex">
+																			<p>{{ numViews }}</p><i class="fas fa-eye pt-1 ml-1"></i>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<a href="{{url}}" class="stretched-link"></a>
+														</div>
+													</td>
+												{{/each}}
+											</tr>
+										{{/grouped_each}}
+									{{else}}
+										<tr>
+											<div class="m-3">No posts to display yet</div>
+										</tr>
+									{{/if}}
+								</table>
 							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div class="w-100">
-										<div class="font-weight-bold">Advanced Old Glast Heim (A.K.A. Nightmare Old Gla</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="/post" class="stretched-link"></a>
 						</div>
-					</div>
-
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/popeyes.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>
-					</div>
-						
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/jollibee.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>							
-					</div>
-
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/hk.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer  flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>
-					</div>
-				</div>
-				<div class="row mb-3 mx-auto" style="width: 95%;">
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/yushoken.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div class="w-100">
-										<div class="font-weight-bold">Advanced Old Glast Heim (A.K.A. Nightmare Old Gla</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>
-					</div>
-
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/popeyes.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>
-					</div>
-						
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/jollibee.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>							
-					</div>
-
-					<div class="w-25 col">
-						<div class="card h-100 shadow">
-							<div class="card-img-top">
-								<img src="/graphics/resto/hk.jpg" class="postPicture">
-							</div>
-							<div class="card-footer contentContainer  flex-fill border border-dark rounded-bottom">
-								<div class="d-flex">
-									<div>
-										<div class="font-weight-bold">Title</div>
-										<div class="">By: Author</div>
-									</div>
-									<span class="mr-auto"></span>
-									<div class="d-flex">
-										<div class="d-flex mx-2">
-											<p>1</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
-										</div>
-										<div class="d-flex">
-											<p>1</p><i class="fas fa-eye pt-1 ml-1"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<a href="post.html" class="stretched-link"></a>
-						</div>
-					</div>
-				</div>
-				
-
-					
-				<!-- *******************************************  Page Number  ******************************************* !-->
-				<div class="mx-auto py-3" style="width: max-content;">
-					<ul class="pagination" style="width: max-content;">
-						<li class="page-item"><a href="#" class="page-link text-dark">Prev</a></li>
-						<li class="page-item"><a href="#" class="page-link text-dark">1</a></li>
-						<li class="page-item"><a href="#" class="page-link text-dark">2</a></li>
-						<li class="page-item"><a href="#" class="page-link text-dark">3</a></li>
-						<li class="page-item"><a href="#" class="page-link text-dark">Next</a></li>
-					</ul>
-				</div>		
-		

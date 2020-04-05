@@ -3,7 +3,7 @@
 						<div id="following">
 							<div class="d-flex">
 								<div class="userReply w-100 p-2 mx-3 px-3" style="height: max-content;">
-									Followers
+									Following
 								</div>
 							</div>
 
@@ -16,55 +16,27 @@
 										<td class="w-25" style="min-width: 250px;"></td>
 										<td class="w-25" style="min-width: 250px;"></td>
 									</tr>
-									<tr>
-										<td>
-											<div class="d-flex border rounded" style="height: 84px;">
-												<img src="graphics/keiKobayashi.png" class="h-100" style="width: 84px;overflow:hidden;">
-												<div class="w-75 px-1 py-4">
-													<span class="lead small">Lorem ipsum dolor </span>
-													<button class="btn btn-primary float-right">Follow</button>	
-												</div>
-											</div>
-										</td>
-										<td>
-											<div class="d-flex border rounded" style="height: 84px;">
-												<img src="graphics/default.png" class="h-100" style="width: 84px;overflow:hidden;">
-												<div class="w-75 px-1 py-4">
-													<span class="lead small">###</span>
-													<button class="btn btn-primary float-right">Follow</button>	
-												</div>
-											</div>
-										</td>
-										<td>
-											<div class="d-flex border rounded" style="height: 84px;">
-												<img src="graphics/default.png" class="h-100" style="width: 84px;overflow:hidden;">
-												<div class="w-75 px-1 py-4">
-													<span class="lead small">###</span>
-													<button class="btn btn-primary float-right">Follow</button>	
-												</div>
-											</div>
-										</td>
-										<td>
-											<div class="d-flex border rounded" style="height: 84px;">
-												<img src="graphics/default.png" class="h-100" style="width: 84px;overflow:hidden;">
-												<div class="w-75 px-1 py-4">
-													<span class="lead small">###</span>
-													<button class="btn btn-primary float-right">Follow</button>	
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="d-flex border rounded" style="height: 84px;">
-												<img src="graphics/default.png" class="h-100" style="width: 84px;overflow:hidden;">
-												<div class="w-75 px-1 py-4">
-													<span class="lead small">###</span>
-													<button class="btn btn-primary float-right">Follow</button>	
-												</div>
-											</div>
-										</td>
-									</tr>
+									{{#if following }}
+										{{#grouped_each 4 following }}
+											<tr>
+												{{#each this }}
+													<td>
+														<div class="d-flex border border-dark rounded" style="height: 84px;">
+															<img src="{{ img }}" class="h-100 border-right border-dark rounded" style="width: 84px;overflow:hidden;">
+															<div class="w-75 px-1 py-4">
+																<span class="lead small">{{ followingName }}</span>
+																<button class="btn btn-primary float-right">Follow</button>	
+															</div>
+														</div>
+													</td>
+												{{/each}}
+											</tr>
+										{{/grouped_each}}
+									{{else}}
+										<tr>
+											<div class="m-3">Not following anyone</div>
+										</tr>
+									{{/if}}
 								</table>
 							</div>
 						</div>
