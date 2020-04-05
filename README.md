@@ -43,9 +43,9 @@ Users are given the option to register their own accounts. Listed below are exis
 * Search function
 * Implement post viewing based on category
 * Display post sorted based on:
-- number of views
-- number of comments
-- score of the post (vote score of the first comment)
+	- number of views
+	- number of comments
+	- score of the post (vote score of the first comment)
 * Store image in DB
 * Update user picture
 * Read user information for individual post comments
