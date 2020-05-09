@@ -1,0 +1,110 @@
+<div class="mx-5">
+	<div class="w-100">
+		<h5 class="w-100 border-bottom border-dark pb-2">Search results in user category</h5>
+		<table class="table table-borderless mx-auto">
+			<tr class="">
+				<td style="width: 33%;"></td>
+				<td style="width: 33%;"></td>
+				<td style="width: 33%;"></td>
+			</tr>
+		{{#if users}}
+		{{#grouped_each 3 users}}
+		<tr>
+
+		{{#each this}}
+			<td>
+				<div class="card border border-dark h-100 shadow" style="z-index:1;">
+					<div class="card-img-top">
+						<img src="{{this.img}}" class="postPicture">
+					</div>
+					<div class="card-footer contentContainer flex-fill border-top border-dark rounded-bottom">
+						<div class="d-flex">
+							<div class="w-100">
+								<div class="font-weight-bold">{{ this.name }}</div>
+								<div class="">{{ this.username }}</div>
+								<div class="">{{ this.email }}</div>
+							</div>
+							<span class="mr-auto"></span>
+							<div class="">
+							</div>
+						</div>
+					</div>
+					<a href="/profile/{{this.url}}/overview" class="stretched-link"></a>
+				</div>
+				{{#if ../../sessionID }}
+				{{#validateCommentVoter ../../sessionID this.followers}}
+				{{#validateUserComment ../../session this.username operator="!="}}
+				<form action="/followUser" method="POST" id="followForm">
+					<input type="hidden" name="profileID" id="profileID" value="{{ this._id }}">
+					<button class="btn-sm btn btn-primary float-right" style="margin-top:-92.3px; margin-left: 355px; position:absolute; z-index:10;">Follow</button>
+				</form>
+				{{/validateUserComment}}
+				{{/validateCommentVoter}}
+
+				{{#inverseValidateCommentVoter ../../sessionID this.followers}}
+				<button class="btn-sm btn btn-secondary float-right" style="margin-top:-92.3px; margin-left: 340px; position:absolute; z-index:10;">Followed</button>
+				{{/inverseValidateCommentVoter}}
+
+				{{/if}}
+				
+			</td>
+		{{/each}}
+		</tr>
+		{{/grouped_each}}
+		{{else}}
+		<tr>
+			<div class="" style="margin-left:42%">No such search results for {{search}} in users</div>
+		</tr>
+		{{/if}}
+		</table>
+	</div>
+	<div class="w-100 my-4 mb-5">
+		<h5 class="w-100 border-bottom border-dark pb-2">Search results in post category</h5>
+		<table class="table table-borderless mx-auto w-100">
+			<tr class="">
+				<td style="width: 33%;"></td>
+				<td style="width: 33%;"></td>
+				<td style="width: 33%;"></td>
+			</tr>
+		{{#if posts}}
+		{{#grouped_each 3 posts}}
+		<tr>
+
+		{{#each this}}
+			<td>
+				<div class="card border border-dark h-100 shadow">
+					<div class="card-img-top">
+						<img src="../{{this.img}}" class="postPicture">
+					</div>
+					<div class="card-footer contentContainer flex-fill border-top border-dark rounded-bottom">
+						<div class="d-flex">
+							<div class="w-100">
+								<div class="font-weight-bold">{{ title }}</div>
+								<div class="">{{ category }}</div>
+								<div class="font-italic">By: {{ this.author }}</div>
+							</div>
+							<span class="mr-auto"></span>
+							<div class="d-flex">
+								<div class="d-flex mx-2">
+									<p>{{ numReplies }}</p><i class="fas fa-comment-alt pt-1 ml-1"></i>
+								</div>
+								<div class="d-flex">
+									<p>{{ numViews }}</p><i class="fas fa-eye pt-1 ml-1"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="{{url}}" class="stretched-link"></a>
+				</div>
+			</td>
+		{{/each}}
+		</tr>
+		{{/grouped_each}}
+		{{else}}
+		<tr>
+			<div class="" style="margin-left:42%">No such search results for {{search}} in posts</div>
+		</tr>
+		{{/if}}
+		</table>
+	</div>
+</div>

@@ -11,11 +11,11 @@ const registerValidation = [
   body('email').not().isEmpty().withMessage("Email is required.")
     .isEmail().withMessage("Please provide a valid email."),
 
-  // Password needs to be min 6 chars
-  body('password').isLength({ min: 6 }).withMessage("Password must be at least 6 characters long."),
+  // Password needs to be min 8 chars
+  body('password').isLength({ min: 8 }).withMessage("Password must be at least 6 characters long."),
 
-  // Confirm Password needs to be min 6 chars AND must match the req.body.password field
-  body('cpassword').isLength({ min: 6 }).withMessage("Password must be at least 6 characters long.")
+  // Confirm Password needs to be min 8 chars AND must match the req.body.password field
+  body('cpassword').isLength({ min: 8 }).withMessage("Password must be at least 6 characters long.")
     .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Passwords must match.");
@@ -32,10 +32,15 @@ const loginValidation = [
 ];
 
 const updateAccountValidation = [
-  // Confirm Password needs to be min 6 chars AND must match the req.body.password field
-
   // Password needs to be min 8 chars
   body('newPass').isLength({ min: 8 }).withMessage("New password must be at least 8 characters long."),
+  // Confirm Password needs to be min 8 chars AND must match the req.body.password field
+  body('conPass').custom((value, { req }) => {
+      if (value !== req.body.oldPass) {
+        throw new Error("Passwords must match.");
+      }
+      return true;
+    })
 ];
 
 // update exports

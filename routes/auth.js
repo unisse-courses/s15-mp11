@@ -24,7 +24,7 @@ router.get('/register', isPublic, (req, res) => {
 
 // POST methods for form submissions
 router.post('/register', isPublic, registerValidation, userController.registerUser);
-router.post('/login', loginValidation, userController.loginUser, postController.displayPosts);
+router.post('/login', loginValidation, userController.loginUser);
 
 // logout
 router.get('/logout', isPrivate, userController.logoutUser);

@@ -2,7 +2,7 @@
 	<div class="mx-auto pb-5" style="width: 60%;">
 		<div class="">
 			<h3>Start A Topic</h3>
-			<form action="/createPost" method="POST" id="createPostForm">
+			<form action="/home/createPost" method="POST" id="createPostForm" enctype="multipart/form-data">
 				<input type="hidden" id="picURL" name="picURL" value="">
 				<div class="form-group">
 					<label for="postTitle" class="h6">Title</label>
@@ -12,17 +12,17 @@
 					<label for="category" class="h6">Category</label>
 					<select class="form-control" id="postCategory" name="postCategory">
 						<option value="" disabled selected>Select category....</option>
-						<option value="japanese">Japanese</option>
-						<option value="american">American</option>
-						<option value="filipino">Filipino</option>
-						<option value="chinese">Chinese</option>
-						<option value="french">French</option>
-						<option value="others">Others</option>
+						<option value="Japanese">Japanese</option>
+						<option value="American">American</option>
+						<option value="Filipino">Filipino</option>
+						<option value="Chinese">Chinese</option>
+						<option value="French">French</option>
+						<option value="Others">Others</option>
 					</select>
 				</div>
 				<div class="form-group" style="width:max-content;">
 					<label class="h6">Custom Picture</label>
-					<input type="file" class="form-control-file" id="customPicture" name="customPicture">
+					<input type="file" class="form-control-file" id="customPicture" name="customPicture" accept="image/*">
 				</div>
 				<div class="form-group">
 					<label for="content" class="h6">Content</label>
@@ -37,13 +37,14 @@
 		<div class="w-100 mt-4">
 			<div class="card h-100 shadow border border-dark">
 				<div class="card-img-top">
-					<img src="" class="postPicture" id="postPicture" name="postPicture">
+					<img src="/graphics/defaultPost.png" class="postPicture" id="postPicture" name="postPicture">
 				</div>
 				<div class="card-footer contentContainer flex-fill border-top border-dark rounded-bottom">
 					<div class="d-flex">
 						<div class="w-100">
 							<input type="text" class="font-weight-bold form-control-plaintext" id="postTitleHolder" name="postTitleHolder" value="" placeholder="Title" disabled>
-							<div class="">By: {{session}}</div>
+							<input type="text" class="form-control-plaintext" id="categoryHolder" name="categoryHolder" value="" placeholder="Category" disabled>
+							<div class="font-italic">By: {{session}}</div>
 						</div>
 						<span class="mr-auto"></span>
 						<div class="d-flex mt-2">

@@ -2,12 +2,33 @@
 		<div class="bg-white mx-auto rounded-lg shadow-lg py-1 px-3" style="min-height: 600px; width: 90%; min-height: max-content; display: table;">
 			<!-- *******************************************  Author  ******************************************* !-->
 			{{#if post }}
-			<div class="postHeader">
-				<img src="{{img}}" class="postAuthorPic">
+			<div class="postHeader d-flex w-100">
+				<img src="{{comments.[0].author.img}}" class="postAuthorPic">
 				<div class="postInfo">
 					<div class="postTitle">{{post.title}}</div>
-					<div class="postTime">Started by {{post.comments.[0].authorUsername}}, {{post.comments.[0].postTime}}</div>
+					<div class="postTime">Started by {{comments.[0].author.username}}, {{comments.[0].postTime}}</div>
 				</div>
+				{{#validateUserComment comments.[0].author.username session operator="==="}}
+					<div class="mr-auto"></div>
+					<div>
+						<form action="{{ post.url }}/delete" method="GET" id="deletePostForm">
+						
+						</form>
+						<input class="editComment" type="hidden" id="comID" name="comID" value="1">
+						<input class="editComment" type="hidden" id="url" name="url" value="{{post.url}}">
+						<button type="button" class="btn btn-secondary btn-sm mt-4 editBtn" data-toggle="modal" data-target="#editModal">
+							<svg class="bi bi-pencil-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/>
+							  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+						<button type="submit" class="btn btn-dark btn-sm mt-4 mr-1" form="deletePostForm">
+							<svg class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="">
+							<path fill-rule="evenodd" d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+					</div>
+				{{/validateUserComment}}
 			</div>
 
 
@@ -17,14 +38,14 @@
 				{{post.numReplies}} replies to this topic
 				</div>
 
-			{{#each post.comments }}
-			{{#validateUserComment authorUsername ../session operator="!="}}
+			{{#each comments }}
+			{{#validateUserComment author.username ../session operator="!="}}
 				<!-- *******************************************  Reply Table  ******************************************* !-->
 					<!-- *******************************************  User Reply  ******************************************* !-->
 				<div class="w-100 userContainer">
 					<input type="hidden" class="postID" value="0">
 					<div class="rounded-sm px-2 mx-2 d-flex userReply" style="height: 35px;">
-							<p class="replyUsername mr-auto h-100 py-1" style="width: max-content;">{{authorUsername}}</p>
+							<p class="replyUsername mr-auto h-100 py-1" style="width: max-content;">{{this.author.username}}</p>
 							<p class="lead h-100" style="font-size: 12px; padding-top: 7px; width: max-content;">#{{commentID}}</p>
 					</div>
 
@@ -32,41 +53,50 @@
 					<!-- *******************************************  Reply Content  ******************************************* !-->
 					<div class="mx-2 rounded d-flex replyContent" style="min-height: 50px;">
 						<div class="replyProfile px-1 py-2">
-								<a href="/profile/{{authorURL}}/overview"><img src="{{authorIMG}}" class="replyPic rounded"><br></a>
-								Member<br>
-								1 post
+								<a href="/profile/{{author.url}}/overview"><img src="{{author.img}}" class="replyPic rounded"><br></a>
+								{{ author.groupTitle }}<br>
+								{{ author.numPosts }} posts
 						</div>
 						<div class="px-3 w-100">
 							<div class="py-1 d-flex">
 								<p class="postTime mr-auto">Posted {{postTime}}</p>
-								<!--
-								<button class="btn mx-1 reportBtn" id="reportBtn" style="display: none;">Report</button>
-								<button class="btn quoteBtn" id="quoteBtn" style="display: none;">Quote</button>
-								!-->
 							</div>
-
-							<div class="d-flex userMessage">
-								{{content}}
-							</div>
-							<div class="my-3 d-flex" style="height: max-content;">
-								<div class="mr-auto"></div>
-								<button class="btn downvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-down"></i></button>
-								<button class="btn mx-1 upvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-up"></i></button>
-								<div class="upvoteCount" id="upvoteCount">{{voteScore}}</div>
-							</div>
+							{{#if isDeleted }}
+								<div class="d-flex userMessage font-italic" style="font-size: 12px;">
+									{{content}}
+								</div>
+							{{else}}
+								<div class="d-flex userMessage">
+									{{content}}
+								</div>
+								<div class="my-3 d-flex" style="height: max-content;">
+									<div class="mr-auto"></div>
+									{{#validateCommentVoter ../session voters }}
+										<form action="{{../post.url}}/{{commentID}}/updateCommentVote" method="POST">
+											<input class="voteType" type="hidden" id="voteType{{commentID}}" name="voteType{{commentID}}" value="">
+											<button type="submit" class="btn downvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-down"></i></button>
+											<button type="submit" class="btn mr-1 upvoteBtn btn-disabled" name="upvote{{commentID}}" id="upvote{{commentID}}"><i class="fas fa-thumbs-up"></i></button>
+										</form>
+									{{/validateCommentVoter}}						
+									<div class="upvoteCount" id="upvoteCount">{{voteScore}}</div>
+								</div>
+								{{#if this.lastEdited }}
+									<p class="postTime mr-auto">Last edited on {{ this.lastEdited }}</p>
+								{{/if}}
+							{{/if}}
 						</div>
 					</div>
 				</div>
 				{{/validateUserComment}}
 
 
-				{{#validateUserComment authorUsername ../session operator="=="}}
+				{{#validateUserComment author.username ../session operator="=="}}
 				<!-- *******************************************  Reply Table  ******************************************* !-->
 					<!-- *******************************************  User Reply  ******************************************* !-->
 				<div class="w-100 userContainer">
 					<input type="hidden" class="postID" value="0">
 					<div class="rounded-sm px-2 mx-2 d-flex userReply" style="height: 35px;">
-							<p class="replyUsername mr-auto h-100 py-1" style="width: max-content;">{{authorUsername}}</p>
+							<p class="replyUsername mr-auto h-100 py-1" style="width: max-content;">{{author.username}}</p>
 							<p class="lead h-100" style="font-size: 12px; padding-top: 7px; width: max-content;">#{{commentID}}</p>
 					</div>
 
@@ -74,36 +104,46 @@
 					<!-- *******************************************  Reply Content  ******************************************* !-->
 					<div class="mx-2 rounded d-flex replyContent" style="min-height: 50px;">
 						<div class="replyProfile px-1 py-2">
-								<a href="/profile/{{authorURL}}/overview"><img src="{{authorIMG}}" class="replyPic rounded"><br></a>
-								Member<br>
-								1 post
+								<a href="/profile/{{author.url}}/overview"><img src="{{author.img}}" class="replyPic rounded"><br></a>
+								{{ author.groupTitle }}<br>
+								{{ author.numPosts }} posts
 						</div>
 						<div class="px-3 w-100">
-							<div class="py-1 d-flex">
+							<div class="py-1">
 								<p class="postTime mr-auto">Posted {{postTime}}</p>
-								<!--
-								<button class="btn mx-1 reportBtn" id="reportBtn" style="display: none;">Report</button>
-								<button class="btn quoteBtn" id="quoteBtn" style="display: none;">Quote</button>
-								!-->
-
+								
 							</div>
+							{{#if isDeleted }}
+								<div class="d-flex userMessage font-italic" style="font-size: 12px;">
+									{{content}}
+								</div>
+							{{else}}
+								<div class="d-flex userMessage">
+									{{content}}
+								</div>
+								<div class="my-3 d-flex" style="height: max-content;">
+									<div class="mr-auto"></div>
+									{{#validateCommentVoter ../session voters }}
+										<form action="{{../post.url}}/{{commentID}}/updateCommentVote" method="POST">
+											<input class="voteType" type="hidden" id="voteType{{commentID}}" name="voteType{{commentID}}" value="">
+											<button type="submit" class="btn downvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-down"></i></button>
+											<button type="submit" class="btn mr-1 upvoteBtn btn-disabled" name="upvote{{commentID}}" id="upvote{{commentID}}"><i class="fas fa-thumbs-up"></i></button>
+										</form>
+									{{/validateCommentVoter}}
+									<div class="upvoteCount" id="upvoteCount">{{voteScore}}</div>
+								</div>
+								{{#if @first }}
 
-							<div class="d-flex userMessage">
-								{{content}}
-							</div>
-							<div class="my-3 d-flex" style="height: max-content;">
-								<div class="mr-auto"></div>
-								<button class="btn downvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-down"></i></button>
-								<button class="btn mx-1 upvoteBtn btn-disabled" name="downvote{{commentID}}" id="downvote{{commentID}}"><i class="fas fa-thumbs-up"></i></button>
-								<div class="upvoteCount" id="upvoteCount">{{voteScore}}</div>
-							</div>
-							<button class="btn btn-danger btn-sm float-right mb-3 pb-1" data-toggle="modal" data-target="#exampleModalCenter">Delete</button>
-							<form action="/update{{../post.url}}/{{commentID}}" method="POST">
-								<input type="hidden" id="url" name="url" value="{{../post.url}}">
-								<input type="hidden" id="comID" name="comID" value="{{commentID}}">
-								<button class="btn btn-secondary btn-sm float-right mb-3 pb-1 mx-2">Edit</button>
-							</form>
-
+								{{else}}
+								<button class="btn btn-danger btn-sm float-right mb-3 pb-1 delBtn" data-toggle="modal" data-target="#deleteModal" style="font-size: 10px; width: max-content;">Delete</button>
+								<input class="editComment" type="hidden" id="url" name="url" value="{{../post.url}}">
+								<input class="editComment" type="hidden" id="comID" name="comID" value="{{commentID}}">
+								<button class="btn btn-secondary btn-sm float-right mb-3 pb-1 mr-1 editBtn" data-toggle="modal" data-target="#editModal" style="font-size: 10px; width: max-content;">Edit</button>
+								{{/if}}
+								{{#if this.lastEdited }}
+									<p class="postTime mr-auto">Last edited on {{ this.lastEdited }}</p>
+								{{/if}}
+							{{/if}}
 						</div>
 					</div>
 				</div>
@@ -114,7 +154,7 @@
 			{{/if}}
 				{{#if session}}
 				<script type="text/javascript">
-					if ($(".upvoteBtn").attr('class') == 'btn mx-1 upvoteBtn btn-disabled') {
+					if ($(".upvoteBtn").attr('class') == 'btn mr-1 upvoteBtn btn-disabled') {
 				    $('.upvoteBtn').removeClass('btn-disabled');
 				    $('.downvoteBtn').removeClass('btn-disabled');
 				  }
@@ -127,13 +167,18 @@
 					<!-- *******************************************  Reply Box  ******************************************* !-->
 					<div class="contentContainer mx-1 rounded d-flex" style="min-height: 50px; height: max-content;">
 						<div class="p-3 d-flex" style="height: max-content">
+							{{#validateUserComment img "/graphics/default.PNG" operator="==="}}
 							<a><img src="{{img}}" class="postAuthorPic rounded"></a>
+							{{/validateUserComment}}
+							{{#validateUserComment img "/graphics/default.PNG" operator="!="}}
+							<a><img src="/{{img}}" class="postAuthorPic rounded"></a>
+							{{/validateUserComment}}
 						</div>
 
 						<div class="px-3 mt-3  mb-2 w-100">
-							<form class="" id="replyForm" style="display: grid;" action="/createReply" method="POST">
+							<form class="" id="replyForm" style="display: grid;" action="{{post.url}}" method="POST">
 								<input type="hidden" id="url" name="url" value="{{post.url}}">
-								<textarea class="ta w-100 form-control" id="ta" name="ta" rows="5" placeholder="Your message here...." form="replyForm"></textarea>
+								<textarea class="ta w-100 form-control" id="ta" name="ta" rows="5" placeholder="Your message here...." form="replyForm" required></textarea>
 							</form>
 
 							<div class="d-flex mt-2">

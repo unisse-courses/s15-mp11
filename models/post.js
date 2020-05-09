@@ -1,22 +1,15 @@
 const mongoose = require('./connection');
 
 const postSchema = new mongoose.Schema({
+    postID: { type: String, required: true },
     category: { type: String, required: true },
     title: { type: String, required: true },
     numViews: { type: Number, default: 0},
     numReplies: { type: Number, default: 0 },
     img: { type: String, required: false },
-    postTime: { type: Date, default: Date.now },
-    comments: [{
-      commentID: { type: Number },
-      postTime: { type: Date },
-      voteScore: { type: Number },
-      content: { type: String },
-      authorUsername:{ type: String },
-      authorURL: { type: String },
-      authorIMG: { type: String }
-    }],
-    url: { type: String, required: false }
+    url: { type: String, required: false },
+    author: { type: String, required: true },
+    commments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comments' }]
   }
 );
 
@@ -47,13 +40,13 @@ exports.getCount = function(req, next) {
 
 // Retrieving all posts
 exports.getAllPosts = function(query, next) {
-  Post.find(query, function(err, post) {
+  Post.find(query).populate('comments').exec(function(err, post) {
     next(err, post);
   });
 };
 
 exports.getOnePost = function(query, next) {
-  Post.findOne(query, function(err, post) {
+  Post.findOne(query).populate('comments').exec(function(err, post) {
     next(err, post);
   });
 };
@@ -69,6 +62,19 @@ exports.updateComment = function(query, update, opt, next) {
     next(err, post);
   });
 };
+
+exports.getCommentDetails = function(query, filter, next) {
+  Post.findOne(query, function(err, comment) {
+    var filter = {
+      username: comment.comments.authorUsername
+    }
+    console.log(filter);
+    User.getAll(filter, function(err, result) {
+      console.log(result);
+      next(err, result);
+    });
+  });
+}
 
 exports.deleteOne = function(filter, next) {
   Post.remove(filter, function(err, status) {

@@ -14,6 +14,7 @@ exports.isPublic = (req, res, next) => {
     res.render('home', {
       session: req.session.username,
       name: req.session.name,
+      img: req.session.img,
       url: req.session.url
     });
   } 
@@ -21,43 +22,3 @@ exports.isPublic = (req, res, next) => {
     return next();
   }
 }
-
-exports.isPrivatePost = (req, res, next) => {
-  if (req.session.user) {
-    return next();
-  }
-  else {
-    res.render('post', {
-
-    });
-  }
-};
-
-exports.isPublicPost = (req, res, next) => {
-  if (req.session.user) {
-    return next();
-  }
-  else {
-    res.redirect('post');
-  }
-};
-
-exports.isPrivateProfile = (req, res, next) => {
-  if (req.session.user) {
-    return next();
-  }
-  else {
-    res.render('overview', {
-
-    });
-  }
-};
-
-exports.isPublicProfile = (req, res, next) => {
-  if (req.session.user) {
-    return next();
-  }
-  else {
-    res.redirect('xxxxxxxx');
-  }
-};

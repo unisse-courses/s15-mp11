@@ -11,18 +11,11 @@ const userSchema = new mongoose.Schema({
     numViews: { type: Number, default: 0 },
     numPosts: { type: Number, default: 0 },
     userScore: { type: Number, default: 100 },
+    userRating: { type: String, default: 'Good' },
     memberTitle: { type: String, default: 'I am new here' },
     groupTitle: { type: String, default: 'Member' },
-    followers: [{
-      followerUsername: String,
-      followerName: String,
-      img: String
-    }],
-    following: [{
-      followingUsername: String,
-      followingName: String,
-      img: String
-    }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
     img: { type: String, default: '/graphics/default.PNG'},
     location: { type: String, required: false},
     aboutMe: { type: String, required: false}
@@ -57,7 +50,7 @@ exports.getAll = function(id, next) {
 
 // Retrieving just ONE user based on a query (first one)
 exports.getOne = function(query, next) {
-  User.findOne(query, function(err, user) {
+  User.findOne(query).populate('followers').populate('following').exec(function(err, user) {
     next(err, user);
   });
 };

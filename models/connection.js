@@ -2,12 +2,12 @@
 // and exporting it for use in all other files through the module.exports
 
 const mongoose = require('mongoose');
-const databaseURL = 'mongodb://localhost:27017/foorumDB';
+const { dbURL } = require('../config');
 
 const options = { useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false };
 
-mongoose.connect(databaseURL, options);
+mongoose.connect(dbURL, options);
 
 module.exports = mongoose;

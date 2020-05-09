@@ -16,16 +16,24 @@
 										<td class="w-25" style="min-width: 250px;"></td>
 										<td class="w-25" style="min-width: 250px;"></td>
 									</tr>
-									{{#if following }}
-										{{#grouped_each 4 following }}
+									{{#if profile.following }}
+										{{#grouped_each 4 profile.following }}
 											<tr>
 												{{#each this }}
 													<td>
 														<div class="d-flex border border-dark rounded" style="height: 84px;">
-															<img src="{{ img }}" class="h-100 border-right border-dark rounded" style="width: 84px;overflow:hidden;">
+															<img src="{{ this.img }}" class="h-100 border-right border-dark rounded" style="width: 90px;overflow:hidden;">
 															<div class="w-75 px-1 py-4">
-																<span class="lead small">{{ followingName }}</span>
-																<button class="btn btn-primary float-right">Follow</button>	
+																<span class="lead">{{ this.username }}</span>
+										{{#if ../../session }}
+											{{#validateCommentVoter ../../sessionID this.followers}}
+											<button class="btn-sm btn btn-primary float-right">Follow</button>
+											{{/validateCommentVoter}}
+											{{#inverseValidateCommentVoter ../../sessionID this.followers}}
+											<button class="btn-sm btn btn-secondary float-right">Followed</button>
+											{{/inverseValidateCommentVoter}}
+										{{/if}}
+
 															</div>
 														</div>
 													</td>

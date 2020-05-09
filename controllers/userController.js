@@ -8,28 +8,39 @@ exports.registerUser = (req, res) => {
   if (errors.isEmpty()) {
     const saltRounds = 10;
 
-    // Hash password
-    bcrypt.hash(password, saltRounds, (err, hashed) => {
-      var temp = username;
-      const newUser = {
-        name: name,
-        email: email,
-        username: username,
-        password: hashed,
-        url: temp
-      };
+    userModel.getOne({ $or: [ {email: email}, {username:username}] }, (err, result) => {
+      if (result) {
+        // found a match, return to login with error
+        req.flash('error_msg', 'User already exists. Please login.');
+        res.redirect('/login');
+      } 
+      else {
+        // no match, create user (next step)
+        // Hash password
+        bcrypt.hash(password, saltRounds, (err, hashed) => {
+          var temp = username;
+          const newUser = {
+            name: name,
+            email: email,
+            username: username,
+            password: hashed,
+            url: temp
+          };
 
-      userModel.create(newUser, (err, user) => {
-        if (err) {
-          req.flash('error_msg', 'Could not create user. Please try again.');
-          res.redirect('/register');
-          console.log(err);
-          // res.status(500).send({ message: "Could not create user"});
-        } else {
-          req.flash('success_msg', 'You are now registered! Login below.');
-          res.redirect('/login');
-        }
-      });
+          userModel.create(newUser, (err, user) => {
+            if (err) {
+              req.flash('error_msg', 'Could not create user. Please try again.');
+              res.redirect('/register');
+              console.log(err);
+              // res.status(500).send({ message: "Could not create user"});
+            } 
+            else {
+              req.flash('success_msg', 'You are now registered! Login below.');
+              res.redirect('/login');
+            }
+          });
+        });
+      }
     });
   } 
   else {
@@ -42,7 +53,8 @@ exports.registerUser = (req, res) => {
         // found a match, return to login with error
         req.flash('error_msg', 'User already exists. Please login.');
         res.redirect('/login');
-      } else {
+      } 
+      else {
         // no match, create user (next step)
         // for now we redirect to the login with no error.
         res.redirect('/register');
@@ -70,7 +82,7 @@ exports.loginUser = (req, res) => {
         // Successful query
         if (user) {
           // User found!
-         // Check password with hashed value in the database
+          // Check password with hashed value in the database
           bcrypt.compare(password, user.password, (err, result) => {
             // passwords match (result == true)
             if (result) {
@@ -92,7 +104,7 @@ exports.loginUser = (req, res) => {
 
               });
 
-              res.redirect('/');
+              res.redirect('/home');
               
             } else {
               // passwords don't match
@@ -103,7 +115,7 @@ exports.loginUser = (req, res) => {
         } 
         else {
           // No user found
-          req.flash('error_msg', 'No registered user with that email. Please register.');
+          req.flash('error_msg', 'No registered user with that email. Please register first.');
           res.redirect('/register');
         }
       }
@@ -141,18 +153,10 @@ exports.displayOverview = (req, res) => {
   var queryProfile = {
     username: req.params.username
   };
+
+  // Retrieve User Profile to be viewed
   userModel.getOne(queryProfile, (err, result) => {
     if (result) {
-      var userRating = '';
-      if (result.userScore >= 80 && result.userScore <= 120)
-        userRating = 'Good';
-      else if (result.userScore >= 40 && result.userScore <= 80)
-        userRating = 'Neutral';
-      else if (result.userScore < 40)
-        userRating = 'Bad';
-      else
-        userRating = 'Outstanding';
-
       // update num views
       var incViews = result.numViews;
       incViews++;
@@ -166,108 +170,56 @@ exports.displayOverview = (req, res) => {
           throw err;
         else {
           post1.save(post1);
-
         }
-      });
+        if (req.session.username) {
+          if (req.session.username === result.username) {
 
-      if (req.session.username === result.username) {
-        console.log('1');
-        res.render('overview', {
-          name: req.session.username,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.username,
-          session: req.session.username,
-          profileURL: result.url,
-          url: req.session.url,
-          img: result.img,
-          update: 'true',
-          location: result.location,
-          about: result.aboutMe
-        });
-      }
-      else if (req.session.username !== result.username && req.session.username) {
-        console.log('2');
-        var query = {
-            $and: [ { followers: { $elemMatch: { followerUsername: req.session.username, followerName: req.session.name } } },
-            {username: result.username} ]
-        };
-        console.log(result.username);
-        userModel.getOne(query, (err, addResult) => {
-          if (addResult) {
-            // dont
-            console.log(addResult);
             res.render('overview', {
-              name: req.session.username,
-              joinDate: result.joinDate,
-              lastActive: result.lastActive,
-              userScore: result.userScore,
-              userRating: userRating,
-              groupTitle: result.groupTitle,
-              numPosts: result.numPosts,
-              numViews: result.numViews,
-              memberTitle: result.memberTitle,
-              username: result.username,
-              session: result.name,
-              profileURL: result.url,
-              url: req.session.url,
-              img: result.img,
-              location: result.location,
-              about: result.aboutMe,
-            });
-          } 
-          else {
-            console.log('2');
-            console.log(err);
-            res.render('overview', {
-              name: req.session.name,
-              joinDate: result.joinDate,
-              lastActive: result.lastActive,
-              userScore: result.userScore,
-              userRating: userRating,
-              groupTitle: result.groupTitle,
-              numPosts: result.numPosts,
-              numViews: result.numViews,
-              memberTitle: result.memberTitle,
-              username: req.params.username,
+              profile: post1,
               session: req.session.username,
-              profileURL: result.url,
+              img: req.session.img,
+              update: true,
               url: req.session.url,
-              img: result.img,
-              location: result.location,
-              about: result.aboutMe,
-              addUser: result.username,
-              addName: result.name,
-              addImg: result.img,
-              addURL: result.url
             });
           }
-        });
-      }
-      else {
-        console.log('3');
-        res.render('overview', {
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          userRating: userRating,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.params.username,
-          location: result.location,
-          profileURL: result.url,
-          img: result.img,
-          about: result.aboutMe
-        });
-      }
+          else if (req.session.username !== result.username && req.session.username) {
+            // Retrieve Current User's Object ID to be used for querying the list of followers
+            userModel.getOne({ username: req.session.username }, (err, user) => {
+              if (err) throw err;
+
+              var query = {
+                  $and: [ { followers: { _id: user._id } }, { username: post1.username } ]
+              };
+              // Retrieve Current user information viewing another user to enable follow
+              userModel.getOne(query, (err, addResult) => {
+                if (addResult) {
+                  res.render('overview', {
+                    profile: post1,
+                    session: req.session.username,
+                    img: req.session.img,
+                    url: req.session.url
+                  });
+                } 
+                else {
+                  res.render('overview', {
+                    profile: post1,
+                    session: req.session.username,
+                    url: req.session.url,
+                    img: req.session.img,
+                    addUser: true
+                  });
+                }
+              });
+            });
+          }
+        }
+        else {
+          res.render('overview', {
+            profile: post1,
+            url: req.session.url,
+          });
+        }
+      });
     }
   else {
     console.log('NO MATCH FOUND!');
@@ -279,42 +231,16 @@ exports.displayFollowers = (req, res) => {
   var query = {
     username: req.params.username
   };
+
   userModel.getOne(query, (err, result) => {
     if (result) {
-      if (!req.session.username) {
-        res.render('followers', {
-          name: req.session.username,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          followers: result.followers,
-          img: result.img,
-          profileURL: result.url,
-        });
-      }
-      else {
-        res.render('followers', {
-          name: req.session.username,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
-          followers: result.followers,
-          profileURL: result.url,
-          url: req.session.url,
-          username: req.session.viewProfile,
-          session: req.session.username,
-          img: result.img,
-        });
-      }
+      res.render('followers', {
+        profile: result,
+        sessionID: req.session.user,
+        session: req.session.username,
+        img: req.session.img,
+        url: req.session.url,
+      });
     }
     else {
       console.log('NO MATCH FOUND!');
@@ -326,42 +252,16 @@ exports.displayFollowing = (req, res) => {
   var query = {
     username: req.params.username
   };
+
   userModel.getOne(query, (err, result) => {
     if (result) {
-      if (!req.session.username) {
-        res.render('following', {
-          name: req.session.username,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
-          following: result.following,
-          img: result.img,
-          profileURL: result.url,
-        });
-      }
-      else {
-        res.render('following', {
-          name: req.session.username,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.viewProfile,
-          following: result.following,
-          profileURL: result.url,
-          url: req.session.url,
-          session: req.session.username,
-          img: result.img,
-        });
-      }
+      res.render('following', {
+        profile: result,
+        sessionID: req.session.user,
+        session: req.session.username,
+        img: req.session.img,
+        url: req.session.url,
+      });
     }
     else {
       console.log('NO MATCH FOUND!');
@@ -371,46 +271,36 @@ exports.displayFollowing = (req, res) => {
 
 exports.updateProfile = (req, res) => {
   var { location, about } = req.body;
+  const file = req.file;
   var query = {
-    username: req.session.username
+    username: req.params.username
   };
   var usr = req.params.username;
-  var update = {
-    $set: { location: location, aboutMe: about }
-  };
+
+  if (file) {
+    var update = {
+      $set: { location: location, aboutMe: about, img: '/'+file.path }
+    };
+    req.session.img = file.path;
+  }
+  else {
+    var update = {
+      $set: { location: location, aboutMe: about}
+    };
+  }
 
   userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
     if (err) throw err;
     
     else {
       result.save(result);
-      var userRating = '';
-      if (result.userScore >= 80 && result.userScore <= 120)
-        userRating = 'Good';
-      else if (result.userScore >= 40 && result.userScore <= 80)
-        userRating = 'Neutral';
-      else if (result.userScore < 40)
-        userRating = 'Bad';
-      else
-        userRating = 'Outstanding';
 
       res.render('overview', {
-        name: result.name,
-        joinDate: result.joinDate,
-        lastActive: result.lastActive,
-        userScore: result.userScore,
-        groupTitle: result.groupTitle,
-        numPosts: result.numPosts,
-        numViews: result.numViews,
-        memberTitle: result.memberTitle,
-        username: req.session.username,
+        profile: result,
         session: req.session.username,
+        img: req.session.img,
+        update: true,
         url: req.session.url,
-        update: 'true',
-        location: result.location,
-        about: result.aboutMe,
-        userRating: userRating,
-        img: result.img,
       });
     };
   });
@@ -420,92 +310,81 @@ exports.updateAccount = (req, res) => {
   const errors = validationResult(req);
   var { oldPass, conPass, newPass } = req.body;
   var query = {
-    username: req.session.username
+    username: req.params.username
   };
+
   if (errors.isEmpty()) {
     const saltRounds = 10;
 
-    // Hash password
-    bcrypt.hash(newPass, saltRounds, (err, hashed) => {
-      var update = {
-        $set: { password: hashed }
-      };
-      userModel.findOneAndUpdate(query, update, { new: true }, function(err, result)  {
-        if (err) throw err;
+    userModel.getOne({ username:req.params.username }, (err, user) => {
+      bcrypt.compare(oldPass, user.password, (err, result) => {
+        // passwords match (result == true)
+        if (result) {
+          // Hash password
+          bcrypt.hash(newPass, saltRounds, (err, hashed) => {
+            var update = {
+              $set: { password: hashed }
+            };
+            userModel.findOneAndUpdate({ username:req.params.username }, update, { new: true }, function(err, result1)  {
+              if (err) throw err;
 
-        res.render('overview', {
-          name: result.name,
-          joinDate: result.joinDate,
-          lastActive: result.lastActive,
-          userScore: result.userScore,
-          groupTitle: result.groupTitle,
-          numPosts: result.numPosts,
-          numViews: result.numViews,
-          memberTitle: result.memberTitle,
-          username: req.session.username,
-          session: req.session.username,
-          url: req.session.url,
-          update: 'true',
-          location: result.location,
-          about: result.aboutMe,
-          img: result.img,
-        });
+            });
+          });
+          res.redirect('overview');
+        } 
+        else {
+          // passwords don't match
+          req.flash('error_msg', 'Incorrect password. Please try again.');
+          res.redirect('overview');
+        }
       });
     });
-
   }
   else {
     const msg = errors.array().map((item) => item.msg);
     req.flash('error_msg', msg.join(' '));
 
-    res.redirect('/updateProfile');
+    res.redirect('overview');
   }
 };
 
 exports.followUser = (req, res) => {
-  // follow the user
-  var { addURL } = req.body;
-  var url = addURL + '/overview';
-  var query = {
+  // Add the followed user to the CURRENT USER'S FOLLOWING LIST
+  var { profileID } = req.body;
+
+  var query1 = {
     username: req.session.username
   };
-  var { addUsername, addName, addImg } = req.body;
-  var person = {
-    followingUsername: addUsername,
-    followingName: addName,
-    img: addImg
-  };
-  userModel.getOne(query, function(err, result)  {
-    if (err) 
-      throw err;
+  var update1 = {
 
-    else {
-      result.following.push(person);
-      result.save(result);
+  }
+  userModel.findOneAndUpdate(query1, update1, { new: true }, function(err, result1)  {
+    if (err) throw err;
 
-      // add the user to the others follower list
-      var query1 = {
-        username: addUsername
-      };
-      var person1 = {
-        followerUsername: result.username,
-        followerName: result.name,
-        img: result.img
-      };
+    result1.following.push(profileID);
+    result1.save(result1);
+    // Add the CURRENT USER to the followed user's FOLLOWER LIST
+    var query2 = {
+      _id: profileID
+    };
+    var update2 = {
 
-      userModel.getOne(query1, function(err, result1)  {
-        if (err) 
-          throw err;
-        else {
-          result1.followers.push(person1);
-          result1.save(result1);
+    };
 
-          res.redirect('/');
-        }
+    userModel.findOneAndUpdate(query2, update2, { new: true }, function(err, result2)  {
+      if (err) throw err;
+
+      result2.followers.push(result1._id);
+      result2.save(result2);
+
+      res.render('overview', {
+        profile: result2,
+        session: req.session.username,
+        img: req.session.img,
+        url: result2.url
       });
-    }
+    });
   });
-
 };
 
 exports.deleteUser = (req, res) => {
@@ -516,6 +395,10 @@ exports.deleteUser = (req, res) => {
     if (err) 
       throw err;
       
+      req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+      });
     res.redirect('/home');
   });
 };

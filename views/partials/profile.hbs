@@ -1,43 +1,42 @@
 <!-- *******************************************  Content  ******************************************* !-->
+				<span class="postTime ml-3">Viewing User Profile: {{ profile.username }}</span>
 				<div class="pb-2 rounded-lg table my-2 contentContainer d-flex" style="min-width: 1000px;">
 					<div class="ml-3" style="display: grid; width:max-content; height: max-content;">
-						<img src="{{img}}" class="userProfilePic my-3 mr-3 shadow-sm">
-						
-						<div class="btn-group-vertical shadow-sm">
+						<div class="" style="width: max-content; display: grid;">
+							<img src="{{profile.img}}" class="userProfilePic my-3 mr-3 shadow-sm">
+							{{#if update}}
+							<form action="updateProfilePicture" method="POST" name="changeProfilePic" id="changeProfilePic" enctype="multipart/form-data">
+								
+							</form>
+							{{/if}}
+						</div>
+						<div class="btn-group-vertical shadow-sm mt-3">
 							
-							<a href="/profile/{{profileURL}}/overview" class="btn btn-light border">Overview</a>
-							<a href="/profile/{{profileURL}}/followers" class="btn btn-light border">Followers</a>
-							<a href="/profile/{{profileURL}}/following" class="btn btn-light border">Following</a>
-
-								
-								
-								
-								
+							<a href="/profile/{{profile.url}}/overview" class="btn btn-light border">Overview</a>
+							<a href="/profile/{{profile.url}}/followers" class="btn btn-light border">Followers</a>
+							<a href="/profile/{{profile.url}}/following" class="btn btn-light border">Following</a>
 						</div>
 					</div>
 					<!-- *******************************************  Profile Template  ******************************************* !-->
 					<div class="bg-light shadow-sm w-100 mt-3 mr-3" style="min-height: 500px;">
 						<div class="d-flex">
 							<div class="m-3 mr-auto" style="height: max-content; width: max-content; display: grid;">
-								<span class="h6">{{ username }}</span>
-								<span class="">Member since {{ joinDate }}</span>
-								<span class="postTime">Last active {{ lastActive }}</span>
+								<span class="h6">{{ profile.username }}</span>
+								<span class="">Member since {{ profile.joinDate }}</span>
+								<span class="postTime">Last active {{ profile.lastActive }}</span>
 							</div>
 
 							{{#if update}}
 								<div class="float-right">
-									<a class="btn btn-success mt-5 mr-3 border" href="updateProfile">Update My Profile</a>
+									<button type="button" class="btn btn-success btn-sm mt-5 mr-3" data-toggle="modal" data-target="#updateProfileModal">Update My Profile</button>
 								</div>
 							{{/if }}
 
 							{{#if addUser }}
 								<form action="/followUser" method="POST">
 									<div class="float-right">
-										<input type="hidden" name="addURL" id="addURL" value="{{ addURL }}">
-										<input type="hidden" name="addUsername" id="addUsername" value="{{ addUser }}">
-										<input type="hidden" name="addName" id="addName" value="{{ addName }}">
-										<input type="hidden" name="addImg" id="addImg" value="{{ addImg }}">
-										<button class="btn btn-primary mt-5 mr-3 border">Follow</button>
+										<input type="hidden" name="profileID" id="profileID" value="{{ profile._id }}">
+										<button class="btn-sm btn-primary mr-3 border" style="margin-top: 65px;">Follow</button>
 									</div>
 								</form>
 							{{/if}}

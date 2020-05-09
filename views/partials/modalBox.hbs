@@ -1,4 +1,4 @@
-<div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,11 +8,106 @@
         </button>
       </div>
       <div class="modal-body text-center text-danger">
+        <form action="deleteComment" id="deleteCommentForm" method="POST">
+
+        </form>
         The contents will no longer be recoverable once deleted, continue?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-dark">Delete Post</button>
+        <button type="submit" class="btn btn-danger" form="deleteCommentForm">Delete Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal w-75" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="margin-left:15%;">
+  <div class="modal-dialog-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title ml-2" id="exampleModalLongTitle">Edit my comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center text-danger">
+      {{post.url}}
+        <form class="" id="editCommentForm" style="display: grid;" action="{{../post.url}}/{{commentID}}/updateComment" method="POST">
+          <textarea class="ta w-100 form-control" id="newContent" name="newContent" rows="5" placeholder="Your message here...." form="editCommentForm" required></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-dark" form="editCommentForm">Edit Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="updateProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="margin-left:14.2%; width: 83.5%;">
+  <div class="modal-dialog-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title ml-2" id="exampleModalLongTitle">Update My Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="w-50 mx-auto" style="min-width: 300px;">
+          <div class="w-50 mx-auto">
+            <div class="">
+              <h3>Update Profile Information</h3>
+              <form action="updateProfile" method="POST" id="profileForm" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="picture">Profile Picture</label>
+                  <div class="mx-auto">
+                    <img src="/graphics/defaultPost.png" class="postPicture" id="profilePicture" name="profilePicture">
+                    <input type="file" class="border form-control-file" id="customProfilePicture" name="customProfilePicture" accept="image/*">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" class="form-control" name="location" id="location" placeholder="Location">
+                </div>
+
+                <div class="form-group" style="">
+                  <label for="about">About Me</label>
+                  <textarea class="ta form-control" name="about" id="about" form="profileForm" placeholder="....." style="height: 150px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success" form="profileForm">Submit</button>
+              </form>
+            </div>
+            <div class="py-5">
+              <h3>Update Password</h3>
+
+              {{> messages }}
+
+              <form action="updateAccount" method="POST" id="accountForm">
+                <div class="form-group">
+                  <label for="oldPass">Old Password</label>
+                  <input type="password" class="form-control" name="oldPass" id="oldPass" placeholder="Old password">
+                </div>
+
+                <div class="form-group">
+                  <label for="conPass">Confirm Password</label>
+                  <input type="password" class="form-control" name="conPass" id="conPass" placeholder="Confirm password">
+                </div>
+
+                <div class="form-group">
+                  <label for="newPass">New Password</label>
+                  <input type="password" class="form-control" name="newPass" id="newPass" placeholder="New password">
+                </div>
+                <button type="submit" class="btn btn-dark" form="accountForm">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

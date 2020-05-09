@@ -17,8 +17,13 @@
 			<!-- *******************************************  User/Guest  ******************************************* !-->
 			<div style="display: grid; min-width: 150px;">
 				{{#if session}}
-					<span class="mx-auto h5 text-white">{{ name }}</span>
-					<img src="/graphics/default.PNG" class="userProfilePic" style="height: 150px; width: 150px;">
+					<span class="mx-auto h5 text-white">{{ session }}</span>
+					{{#validateUserComment img "/graphics/default.PNG" operator="==="}}
+					<img src="{{img}}" class="userProfilePic" style="height: 150px; width: 150px;">
+					{{/validateUserComment}}
+					{{#validateUserComment img "/graphics/default.PNG" operator="!="}}
+					<img src="/{{img}}" class="userProfilePic" style="height: 150px; width: 150px;">
+					{{/validateUserComment}}
 					<a href="/logout" class="btn btn-secondary my-2">Logout</a>
 					<div class="w-100">
 						<a type="submit" class="btn btn-light w-100" href="/profile/{{url}}/overview">My settings</a>
@@ -36,8 +41,8 @@
 	<!-- *******************************************  Sticky Search Navbar  ******************************************* !-->
 	<nav class="navbar w-100 position-absolute navbar-dark d-flex justify-content-end border-top" style="z-index: 1;" id="searchNav">
 		<a href="/home" class="nav-link navbarFeatures rounded mr-auto"><i class='fas fa-home' style='font-size:20px'></i></a>
-		<form class="form-inline px-3" action="#" id="searchForm" style="display: none;">
-			<input class="form-control mr-sm-2"  id="searchBox" type="text" placeholder="Search">
+		<form class="form-inline px-3" action="/home/search" id="searchForm" style="display: none;" method="POST">
+			<input class="form-control mr-sm-2"  id="searchBox" name="searchBox" type="text" placeholder="Search">
 			<button class="btn btn-success" id="searchBtn" type="submit">Search</button>
 		</form>
 		<button class="btn navbarFeatures " data-toggle="" data-target="#searchForm" id="searchIcon"><i class="fa fa-search" id="searchIcon"></i></button>

@@ -7,8 +7,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('./models/connection');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 const fs = require('fs');
-const multer = require('multer');
 
+
+const { envPort, sessionKey } = require('./config');
 
 // Routes imports
 const authRouter = require('./routes/auth');
@@ -16,7 +17,7 @@ const indexRouter = require('./routes/index');
 
 // Creates the express application
 const app = express();
-const port = 3000;
+const port = envPort || 3000;
 
 // Configure to use sessions
 const session = require('express-session');
@@ -49,6 +50,18 @@ app.engine('hbs', exphbs({
           out += options.fn(subcontext);
       }
       return out;
+    },
+    validateCommentVoter: function(elem, list, options) {
+      if(list.indexOf(elem) > -1) {
+        return options.inverse(this);
+      }
+      return options.fn(this);
+    },
+    inverseValidateCommentVoter: function(elem, list, options) {
+      if(list.indexOf(elem) > -1) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
     },
     validateUserComment: function(lvalue, rvalue, options) {
       if (arguments.length < 3)
@@ -91,11 +104,12 @@ app.use(bodyParser.urlencoded({
 }));
 
 // serve static files
+app.use('/uploads', express.static('uploads'));
 app.use(express.static('public'));
 
 // Sessions
 app.use(session({
-  secret: 'somegibberishsecret',
+  secret: sessionKey,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
   resave: false,
   saveUninitialized: true,
