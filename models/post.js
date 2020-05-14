@@ -1,7 +1,7 @@
 const mongoose = require('./connection');
 
 const postSchema = new mongoose.Schema({
-    postID: { type: String, required: true },
+    postID: { type: Number, required: true },
     category: { type: String, required: true },
     title: { type: String, required: true },
     numViews: { type: Number, default: 0},
@@ -31,9 +31,7 @@ exports.createComment = function(query, comment, opt, next) {
 };
 
 exports.getCount = function(req, next) {
-  Post.find(req, function(err, post) {
-
-  }).count(function(err, count) {
+  Post.find(req).sort({_id:-1}).limit(1).exec(function(err, count) {
     next(err, count);
   });
 };

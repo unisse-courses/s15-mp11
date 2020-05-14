@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
     commentID: { type: Number, default: 1 },
     postTime: { type: Date, default: Date.now },
     lastEdited: { type: Date },
-    isDeleted: { type: Boolean },
+    isDeleted: { type: Number },
     voteScore: { type: Number, default: 0 },
     content: { type: String },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },

@@ -1,4 +1,5 @@
 const userModel = require('../models/user');
+const postModel = require('../models/post');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 
@@ -147,6 +148,34 @@ exports.logoutUser = (req, res) => {
       res.redirect('/');
     });
   }
+};
+
+exports.displayActivity = (req, res) => {
+  var query = {
+    username: req.params.username
+  }
+  console.log(query);
+  userModel.getOne(query, (err, result) => {
+    if (err) 
+      throw err;
+    console.log(result);
+    postModel.getAllPosts({author: result.username}, (err, posts) => {
+      var postObjects = [];
+
+      posts.forEach(function(doc) {
+        postObjects.push(doc.toObject());
+      });
+
+      res.render('activity', {
+        profile: result,
+        sessionID: req.session.user,
+        session: req.session.username,
+        img: req.session.img,
+        url: req.session.url,
+        posts: postObjects
+      });
+    });
+  });
 };
 
 exports.displayOverview = (req, res) => {

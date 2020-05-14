@@ -172,13 +172,14 @@ exports.updateComment = (req, res) => {
 };
 
 exports.deleteComment = (req, res) => {
-	var { url, comID } = req.body;
+	var { comID } = req.body;
+	var url = '/post/' + req.params.id;
 	var newContent = 'The comment has been deleted and is no longer viewable.';
 	var query = {
 		$and: [ { postURL: url }, { commentID: comID } ]
 	};
 	var update = {
-		$set: { content: newContent, isDeleted: true }
+		$set: { content: newContent, isDeleted: 1 }
 	};
 	var filter = {
 		new: true
@@ -189,10 +190,13 @@ exports.deleteComment = (req, res) => {
 			throw err;
 		else {
 			commentModel.findOneAndUpdate(query, update, filter, (err, status) => {
-				if (err)
+				if (err) {
 					throw err;
+				}
+
 				else {
 					commentModel.getAllComments({ postURL: url }, (err, comments) => {
+						console.log(status);
 						if (err)
 							throw err;
 						else {

@@ -6,11 +6,11 @@
 				<input type="hidden" id="picURL" name="picURL" value="">
 				<div class="form-group">
 					<label for="postTitle" class="h6">Title</label>
-					<input type="text" class="form-control" name="postTitle" id="postTitle" placeholder="Title">
+					<input type="text" class="form-control" name="postTitle" id="postTitle" placeholder="Title" required>
 				</div>
 				<div class="form-group">
 					<label for="category" class="h6">Category</label>
-					<select class="form-control" id="postCategory" name="postCategory">
+					<select class="form-control" id="postCategory" name="postCategory" required>
 						<option value="" disabled selected>Select category....</option>
 						<option value="Japanese">Japanese</option>
 						<option value="American">American</option>
@@ -26,7 +26,7 @@
 				</div>
 				<div class="form-group">
 					<label for="content" class="h6">Content</label>
-					<textarea class="ta w-100 form-control" name="content" id="content" form="createPostForm" placeholder="Type your message here...." style="height: 150px;"></textarea>
+					<textarea class="ta w-100 form-control" name="content" id="content" form="createPostForm" placeholder="Type your message here...." style="height: 150px;" required></textarea>
 				</div>
 				<button type="submit" class="btn btn-success float-right">Submit</button>
 			</form>

@@ -22,12 +22,17 @@
 												{{#each this }}
 													<td>
 														<div class="d-flex border border-dark rounded" style="height: 84px;">
-															<img src="{{ this.img }}" class="h-100 border-right border-dark rounded" style="width: 90px;overflow:hidden;">
+														<a href="/profile/{{this.url}}/overview">
+														<img src="{{ this.img }}" class="h-100 border-right border-dark rounded" style="width: 90px;overflow:hidden;"></a>
+															
 															<div class="w-75 px-1 py-4">
 																<span class="lead">{{ this.username }}</span>
 										{{#if ../../session }}
 											{{#validateCommentVoter ../../sessionID this.followers}}
-											<button class="btn-sm btn btn-primary float-right">Follow</button>
+											<form action="/followUser" method="POST" id="followForm">
+					<input type="hidden" name="profileID" id="profileID" value="{{ this._id }}">
+					<button class="btn-sm btn btn-primary float-right" style="margin-top: -30px;">Follow</button>
+				</form>
 											{{/validateCommentVoter}}
 											{{#inverseValidateCommentVoter ../../sessionID this.followers}}
 											<button class="btn-sm btn btn-secondary float-right">Followed</button>

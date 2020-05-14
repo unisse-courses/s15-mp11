@@ -39,6 +39,7 @@ router.get('/createPost', (req, res) => {
 router.post('/profile/:username/updateProfile', upload.single('customProfilePicture'), userController.updateProfile);
 router.post('/profile/:username/updateAccount', updateAccountValidation, userController.updateAccount);
 router.get('/profile/:username/overview', userController.displayOverview);
+router.get('/profile/:username/activity', userController.displayActivity);
 router.get('/profile/:username/following', userController.displayFollowing);
 router.get('/profile/:username/followers', userController.displayFollowers);
 router.post('/home/createPost', upload.single('customPicture'), postController.createPost);
@@ -75,9 +76,9 @@ router.get('/contact', (req, res) => {
 // to check
 router.post('/followUser', userController.followUser);
 
-router.post('/post/:id/:comment/updateComment', commentController.updateComment);
+router.post('/post/:id/updateComment', commentController.updateComment);
 router.post('/post/:id/:comment/updateCommentVote', commentController.updateCommentVote);
-router.post('/post/deleteComment', commentController.deleteComment);
+router.post('/post/:id/deleteComment', commentController.deleteComment);
 router.get('/post/:id/delete', postController.deletePost);
 
 router.post('/home/search', postController.search);

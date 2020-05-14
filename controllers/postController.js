@@ -10,15 +10,22 @@ exports.createPost = (req, res) => {
 	var imgPath = picURL;
 	if (errors.isEmpty()) {
 		postModel.getCount({}, (err, post) => {
-			var count = post;
+			var count;
+			if (post.length == 0) {
+				count = 0;
+			}
+			else {
+				count = post[0].postID;
+			}
 			count++;
 			var temp = '/post/';
-      		temp += count;
+      		temp += count.toString();
       		const file = req.file;
 
       		if (file) {
       			imgPath = file.path;
       		}
+
       		//	Retrieve post creator's _id
       		userModel.getOne({ username: req.session.username }, (err, user) => {
       			const newComment = {
@@ -117,10 +124,6 @@ exports.displayPosts = (req, res) => {
 
 		posts.forEach(function(doc) {
 			postObjects.push(doc.toObject());
-		});
-
-		commentModel.getOne({}, (err, content) => {
-
 		});
 
 		res.render('home', {
